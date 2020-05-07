@@ -16,17 +16,18 @@ class PublicTransport {
     std::vector<Line *> m_lines;
     int time;
 public:
-	
+
 	/**
     * @brief load streets and load allstops functions
     * @param filename
     */
 	void load_map(const char *filename);
+	
 	/**
     * @brief calls load lines and connections from file
     * @param filename
     */
-	void load_lines(const char *filename);
+	void load_alllines(const char *filename);
 };
 
 #endif

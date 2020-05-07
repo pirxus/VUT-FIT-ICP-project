@@ -12,6 +12,6 @@ void load_map(const char *filename){
 	load_allstops(filename);
 }
 
-void load_lines(const char *filename){
+void load_alllines(const char *filename){
 	load_lines(filename);
 }
