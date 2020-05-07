@@ -20,8 +20,13 @@ class Map {
     std::vector<Street *> m_streets_v; /**< A vector of vertical streets */
     std::vector<Street *> m_streets_h; /**< A vector of horizontal streets */
     std::vector<Crossroads *> m_cross; /**< A vector of all crossroads on the map */
+    std::vector<Stops *> m_allstops;
+
 public:
-	//load streets from file
+	/**
+	* @brief load streets from file
+ 	* @param filename
+ 	*/
 	void load_streets(const char *filename);
 
     /**
@@ -49,6 +54,11 @@ public:
      * to their respective objects
      */
     std::vector<Street *> get_vertical_streets();
+	/**
+	* @brief load allstops from file
+ 	* @param filename
+ 	*/
+	void load_allstops(const char *filename);
 };
 
 #endif

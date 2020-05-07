@@ -17,6 +17,7 @@ void Street::add_stop(Stop *stop) {
 
 }
 
+
 Street::Street(std::string name, int x1, int y1, int x2, int y2){
 	m_name = name;
 	Coords m_start(x1, y1);

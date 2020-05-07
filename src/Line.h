@@ -33,7 +33,11 @@ public:
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);
     void set_color(char color);
-    //load lines and connections from file
+    
+    /**
+    * @brief load lines and connections from file
+    * @param filename
+    */
     void load_lines(const char* filename);
 };
 

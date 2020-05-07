@@ -13,28 +13,32 @@ void Line::add_connection(Connection *conn) {
 void Line::set_color(char color) {
 }
 
-/**
- * @param filename
- *
- */
 void load_streets(const char *filename){
-	ifstream file(filename);
-	string line;
-	vector<string> row;
-	while (getline(file, line)) {
-		string word;
+	std::ifstream file(filename);
+	std::string line;
+	std::vector<std::string> row;
+	int num;
+	while(getline(file, line)){
+		std::string word;
 		row.clear();
-		stringstream ss(line); 
+		std::stringstream ss(line); 
 		while (getline(ss, word, ',')) { 
             // add all the column data 
             // of a row to a vector 
-            	row.push_back(word); 
+            	row.push_back(word);
+        }
+            	try {
+            		num = std::stoi(row.at(0));
+            	}
+           		catch (std::invalid_argument const &e) {
+           			std::cerr << "Bad input: std::invalid_argument thrown" << '\n';
+           		}
+           		catch (std::out_of_range const &e) {
+           			std::cerr << "Integer is out of range: std::out_of_range thrown" << '\n';
+           		}
+        	while (getline(file, line)){
+        		if (line.length() == 0){
+        			break;
+        		}
         	}
-        	//Line l(row[0], row[1], row[2], row[3], row[4]);
-        	/*
-        	for (unsigned int i = 0; i < row.size(); i++){
-        			cout << row.at(i) << endl;
-        		} 
-        		*/
-    	}
 }
