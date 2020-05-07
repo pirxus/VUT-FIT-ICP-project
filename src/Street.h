@@ -32,6 +32,11 @@ public:
     void add_stop(Stop *stop);
     //constructor declaration 
     Street(string name, int x1, int y1, int x2, int y2);
+
+    //bool is_correct_street();
+
+    bool is_vertical();
+    bool is_horizontal();
 };
 
 #endif
