@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->zoomInButton, &QPushButton::clicked, this, &MainWindow::zoomIn);
     connect(ui->zoomOutButton, &QPushButton::clicked, this, &MainWindow::zoomOut);
     connect(ui->zoomSlider, &QSlider::valueChanged, this, &MainWindow::sliderZoom);
-
 }
 
 MainWindow::~MainWindow()

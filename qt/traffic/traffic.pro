@@ -16,11 +16,27 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Connection.cpp \
+    Coords.cpp \
+    Crossroads.cpp \
+    Line.cpp \
+    Map.cpp \
+    PublicTransport.cpp \
+    Stop.cpp \
+    Street.cpp \
     main.cpp \
     mainwindow.cpp \
     scene.cpp
 
 HEADERS += \
+    Connection.h \
+    Coords.h \
+    Crossroads.h \
+    Line.h \
+    Map.h \
+    PublicTransport.h \
+    Stop.h \
+    Street.h \
     mainwindow.h \
     scene.h
 
