@@ -31,7 +31,7 @@ public:
     bool lies_on_street(Coords point);
     void add_stop(Stop *stop);
     //constructor declaration 
-    Street(string name, int x1, int y1, int x2, int y2);
+    Street(std::string name, int x1, int y1, int x2, int y2);
 };
 
 #endif

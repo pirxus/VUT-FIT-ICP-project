@@ -20,6 +20,7 @@ public:
     Street *street;
 
     Stop(Coords pos, Street *street): pos{pos}, street{street} {}
+    Stop(std::string name_street, std::string name, int x1, int y1);
 };
 
 #endif

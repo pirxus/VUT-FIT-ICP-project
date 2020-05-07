@@ -18,9 +18,12 @@
 class Map {
     std::vector<Street *> m_streets;
     std::vector<Crossroads *> m_cross;
+    std::vector<Stops *> m_allstops;
+
 public:
 	//load streets from file
 	void load_streets(const char *filename);
+	void load_allstops(const char *filename);
 
 };
 
