@@ -13,7 +13,7 @@ void Line::add_connection(Connection *conn) {
 void Line::set_color(char color) {
 }
 
-void load_streets(const char *filename){
+void load_lines(const char *filename, std::vector<Stop *> all_stops){
 	std::ifstream file(filename);
 	std::string line;
 	std::vector<std::string> row;
@@ -35,6 +35,15 @@ void load_streets(const char *filename){
            		}
            		catch (std::out_of_range const &e) {
            			std::cerr << "Integer is out of range: std::out_of_range thrown" << '\n';
+           		}
+           		unsigned x = row.size();
+           		unsigned y = all_stops.size();
+           		for (unsigned i = 1; i < x; i++){
+           			for (unsigned j = 0; j < y; j++){
+           				if (row.at(i) == all_stops.at(j)->name){
+           					this->m_stops.push_back(all_stops.at(j));
+           				}
+           			}
            		}
         	while (getline(file, line)){
         		if (line.length() == 0){
