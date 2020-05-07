@@ -7,10 +7,12 @@
 #include "PublicTransport.h"
 
 
-void load_map(streetList.csv){
-	load_streets(streetList.csv);
+void load_map(){
+	const char filename[] = "streetList.csv";
+	load_streets(filename);
 }
 
-void load_lines(lineList.csv){
-	load_lines(lineList.csv);
+void load_lines(){
+	const char filename[] = "testDataStreet.csv";
+	load_lines(filename);
 }
