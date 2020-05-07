@@ -10,24 +10,25 @@
  * @param filename
  *
  */
-void load_streets(const char *filename){
-	ifstream file(filename);
-	string line;
-	vector<string> row;
+void Map::load_streets(const char *filename){
+	std::ifstream file(filename);
+	std::string line;
+	std::vector<std::string> row;
+	std::vector<int> coords;
 	while (getline(file, line)) {
-		string word;
+		std::string word;
 		row.clear();;
-		stringstream ss(line); 
+		std::stringstream ss(line); 
 		while (getline(ss, word, ',')) { 
             // add all the column data 
             // of a row to a vector 
             	row.push_back(word);
-        	}
-        	Street s(row[0], row[1], row[2], row[3], row[4]);
-        	/*
-        	for (unsigned int i = 0; i < row.size(); i++){
-        			cout << row.at(i) << endl;
-        		} 
-        		*/
-    	}
+            	for (unsigned int i = 1; i < row.size();i++){
+            		int num = atoi(row.at(i).c_str());
+            		coords.push_back(num);
+            	}
+           		Street *s = new Street(row[0], num[0], num[1], num[2], num[3]);
+ 				this->m_streets.push_back(s);
+        }
+    }
 }
