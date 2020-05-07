@@ -13,10 +13,6 @@ void Line::add_connection(Connection *conn) {
 void Line::set_color(char color) {
 }
 
-/**
- * @param filename
- *
- */
 void load_streets(const char *filename){
 	ifstream file(filename);
 	string line;

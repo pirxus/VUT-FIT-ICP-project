@@ -21,8 +21,16 @@ class Map {
     std::vector<Stops *> m_allstops;
 
 public:
-	//load streets from file
+	/**
+	* @brief load streets from file
+ 	* @param filename
+ 	*/
 	void load_streets(const char *filename);
+
+	/**
+	* @brief load allstops from file
+ 	* @param filename
+ 	*/
 	void load_allstops(const char *filename);
 
 };

@@ -20,6 +20,14 @@ public:
     Street *street;
 
     Stop(Coords pos, Street *street): pos{pos}, street{street} {}
+
+	/**
+	* @brief Street constructor
+ 	* @param name_street name of the street
+ 	* @param name name of the stop
+ 	* @param x1 the x coordinate
+ 	* @param y1 the y coordinate
+ 	*/
     Stop(std::string name_street, std::string name, int x1, int y1);
 };
 

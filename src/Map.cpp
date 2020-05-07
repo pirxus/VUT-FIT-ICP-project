@@ -6,10 +6,6 @@
 
 #include "Map.h"
 
-/**
- * @param filename
- *
- */
 void Map::load_streets(const char *filename){
 	std::ifstream file(filename);
 	std::string line;
@@ -30,11 +26,12 @@ void Map::load_streets(const char *filename){
             			int num = std::stoi(row.at(i));
             			coordinates.push_back(num);
             		}
+            		//TODO Propagate
             		catch (std::invalid_argument const &e) {
-            			std::cout << "Bad input: std::invalid_argument thrown" << '\n';
+            			std::cerr << "Bad input: std::invalid_argument thrown" << '\n';
             		}
             		catch (std::out_of_range const &e) {
-            			std::cout << "Integer is out of range: std::out_of_range thrown" << '\n';
+            			std::cerr << "Integer is out of range: std::out_of_range thrown" << '\n';
             		}
             	}
         Street *s = new Street(row[0], coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
@@ -42,10 +39,6 @@ void Map::load_streets(const char *filename){
     }
 }
 
-/**
- * @param filename
- *
- */
 void Map::load_allstopss(const char *filename){
 	std::ifstream file(filename);
 	std::string line;

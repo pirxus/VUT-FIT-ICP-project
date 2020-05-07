@@ -9,6 +9,7 @@
 
 void load_map(const char *filename){
 	load_streets(filename);
+	load_allstops(filename);
 }
 
 void load_lines(const char *filename){
