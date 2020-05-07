@@ -43,8 +43,8 @@ void Map::load_streets(const char *filename){
 }
 
 void Map::find_crossroads() {
-    std::vector<Street *> vertical = this->get_vertical();
-    std::vector<Street *> horizontal = this->get_horizontal();
+    std::vector<Street *> ver = this->get_vertical();
+    std::vector<Street *> hor = this->get_horizontal();
 }
 
 void Map::load_streets_vertical_horizontal() {
