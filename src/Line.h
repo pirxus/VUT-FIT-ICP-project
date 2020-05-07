@@ -37,6 +37,7 @@ public:
     /**
     * @brief load lines and connections from file
     * @param filename
+    * @param all_stops vector of all_stops
     */
     void load_lines(const char* filename,std::vector<Stop * > all_stops);
 };
