@@ -14,22 +14,31 @@ void Map::load_streets(const char *filename){
 	std::ifstream file(filename);
 	std::string line;
 	std::vector<std::string> row;
-	std::vector<int> coords;
+	std::vector<int> coordinates;
 	while (getline(file, line)) {
 		std::string word;
 		row.clear();
+		coordinates.clear();
 		std::stringstream ss(line); 
 		while (getline(ss, word, ',')) { 
             // add all the column data 
             // of a row to a vector 
             	row.push_back(word);
-            	for (unsigned int i = 1; i < row.size();i++){
-            		int num = atoi(row.at(i).c_str());
-            		coords.push_back(num);
-            	}
-           		Street *s = new Street(row[0], num[0], num[1], num[2], num[3]);
- 				this->m_streets.push_back(s);
         }
+        for (unsigned int i = 1; i < row.size();i++){
+            		try {
+            			int num = std::stoi(row.at(i));
+            			coordinates.push_back(num);
+            		}
+            		catch (std::invalid_argument const &e) {
+            			std::cout << "Bad input: std::invalid_argument thrown" << '\n';
+            		}
+            		catch (std::out_of_range const &e) {
+            			std::cout << "Integer is out of range: std::out_of_range thrown" << '\n';
+            		}
+            	}
+        Street *s = new Street(row[0], coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+ 		this->m_streets.push_back(s);
     }
 }
 
