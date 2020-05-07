@@ -7,6 +7,10 @@
 #ifndef LINE_H
 #define LINE_H
 
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <list>
 #include <vector>
 
@@ -29,6 +33,8 @@ public:
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);
     void set_color(char color);
+    //load lines and connections from file
+    void load_lines(const char* filename);
 };
 
 #endif
