@@ -7,6 +7,11 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <list>
 #include "Coords.h"
 
