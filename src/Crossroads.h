@@ -25,8 +25,6 @@ public:
 
     Coords get_pos() { return this->m_pos; }
     std::pair<Street *, Street *> get_streets() { return this->m_streets; }
-    Street *get_vertical() { return m_streets.first; }
-    Street *get_horizontal() { return m_streets.second; }
 
 };
 

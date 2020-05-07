@@ -40,34 +40,6 @@ void Map::load_streets(const char *filename){
 }
 
 void Map::find_crossroads() {
-    std::vector<Street *> ver = this->get_vertical();
-    std::vector<Street *> hor = this->get_horizontal();
-}
-
-void Map::load_streets_vertical_horizontal() {
-    /* Go through all the streets.. */
-    std::vector<Street *>::iterator it;
-    for (it = this->m_streets.begin(); it != this->m_streets.end(); it++) {
-
-        if (it->is_horizontal()) { //FIXME iter handling?? /* A horizontal street */
-            this->m_streets_h.push_back(it);
-
-        } else if (it->is_vertical()) { /* A vertical street */
-            this->m_streets_v.push_back(it);
-
-        } else {
-            std::cerr<<"Error: a street with name "<<it->get_name()<<" was diagonal\n";
-            //TODO exceptions..
-        }
-    }
-}
-
-std::vector<Street *> Map::get_horizontal_streets() {
-    return this->m_streets_h;
-}
-
-std::vector<Street *> Map::get_vertical_streets() {
-    return this->m_streets_v;
 }
 
 void Map::load_allstopss(const char *filename){

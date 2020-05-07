@@ -35,25 +35,6 @@ public:
      */
     void find_crossroads();
 
-    /**
-     * @brief This function populates the m_streets_v and m_streets_h with horizontal
-     * and vertical streets on the map
-     *
-     * @throw  TODO
-     */
-    void load_streets_vertical_horizontal();
-
-    /**
-     * @brief This method finds all horizontal streets and returns a vector of pointers
-     * to their respective objects
-     */
-    std::vector<Street *> get_horizontal_streets();
-
-    /**
-     * @brief This method finds all vertical streets and returns a vector of pointers
-     * to their respective objects
-     */
-    std::vector<Street *> get_vertical_streets();
 	/**
 	* @brief load allstops from file
  	* @param filename
