@@ -17,7 +17,7 @@ void Map::load_streets(const char *filename){
 	std::vector<int> coords;
 	while (getline(file, line)) {
 		std::string word;
-		row.clear();;
+		row.clear();
 		std::stringstream ss(line); 
 		while (getline(ss, word, ',')) { 
             // add all the column data 
