@@ -21,7 +21,7 @@ void Map::load_streets(const char *filename){
             // of a row to a vector 
             	row.push_back(word);
         }
-        for (unsigned int i = 1; i < row.size();i++){
+        for (unsigned i = 1; i < row.size();i++){
             		try {
             			int num = std::stoi(row.at(i));
             			coordinates.push_back(num);
@@ -52,9 +52,9 @@ void Map::load_allstopss(const char *filename){
 		while (getline(ss, word, ',')) { 
             // add all the column data 
             // of a row to a vector 
-            	row.push_back(word);
+            row.push_back(word);
         }
-        for (unsigned int i = 2; i < row.size();i++){
+        for (unsigned i = 2; i < row.size();i++){
             		try {
             			int num = std::stoi(row.at(i));
             			coordinates.push_back(num);

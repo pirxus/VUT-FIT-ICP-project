@@ -22,12 +22,13 @@ public:
     * @param filename
     */
 	void load_map(const char *filename);
-	
-	/**
-    * @brief calls load lines and connections from file
+
+    /**
+    * @brief load lines and connections from file
     * @param filename
+    * @param all_stops vector of all_stops
     */
-	void load_alllines(const char *filename);
+	void load_alllines(const char *filename, std::vector<Stop *> all_stops);
 };
 
 #endif

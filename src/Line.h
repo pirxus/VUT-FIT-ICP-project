@@ -33,13 +33,8 @@ public:
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);
     void set_color(char color);
-
-    /**
-    * @brief load lines and connections from file
-    * @param filename
-    * @param all_stops vector of all_stops
-    */
-    void load_lines(const char* filename,std::vector<Stop * > all_stops);
+    //TODO
+    Line(unsigned line_number, );
 };
 
 #endif
