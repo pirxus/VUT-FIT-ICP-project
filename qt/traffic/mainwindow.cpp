@@ -65,6 +65,8 @@ void MainWindow::load_map()
         auto line = this->ui->graphicsView->scene()->addLine((*it).second->start.x(), (*it).second->start.y(),
                      (*it).second->end.x(), (*it).second->end.y());
 
+        line->setPen(QPen({Qt::black}, 3));
+
         /* Set street name labels.. */
         auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
         text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
@@ -85,6 +87,9 @@ void MainWindow::load_stops()
         this->ui->graphicsView->scene()->addEllipse(
                     (*it).second->pos.x()-5, (*it).second->pos.y()-5, 10, 10,
                     QPen({Qt::red}, 3), QBrush(Qt::black, Qt::SolidPattern));
+
+        auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
+        text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
     }
 }
 
@@ -96,6 +101,7 @@ void MainWindow::load_lines()
 
     /* Let the PublicTransport module load the lines */
     transit->load_lines(path.c_str());
+    transit->prepare_connections();
 }
 
 void MainWindow::initTraffic()

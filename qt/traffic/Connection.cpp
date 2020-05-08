@@ -5,27 +5,30 @@
  */
 
 #include "Connection.h"
+#include "Line.h"
 
-Connection::Connection(Line *line, std::list<Stop *> stops, std::list<QTime> times)
+Connection::Connection(Line *line, std::vector<Stop *> stops, std::vector<QTime> times)
 {
     m_line = line;
+    /* Set the connection schedule */
+    this->set_schedule(stops, times);
+    active = 0;
+    route_index = 0;
+    m_delay = 0;
+}
+
+void Connection::update_route() {
+    this->m_route = this->m_line->get_route();
+}
+
+void Connection::set_schedule(std::vector<Stop *> stops, std::vector<QTime> times) {
     /* Create the schedule by merging the stops and times */
     auto stop = stops.begin();
     auto time = times.begin();
     for (; stop != stops.end() && time != times.end(); stop++, time++) {
         m_schedule.push_back(std::pair<Stop *, QTime>(*stop, *time));
     }
-
-    active = 0;
-    route_index = 0;
-    m_delay = 0;
 }
 
-void Connection::set_schedule(std::list<std::pair<Stop *, int>> schedule) {
-}
-void Connection::add_to_schedule(std::pair<Stop *, int> stop) {
-}
-void Connection::update_route() {
-}
-void Connection::update_position(int time) {
+void Connection::update_position(QTime time) {
 }

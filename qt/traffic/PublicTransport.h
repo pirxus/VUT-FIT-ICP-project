@@ -49,6 +49,16 @@ public:
 
     void delete_lines();
 
+    /**
+     * @brief Makes all the vehicles move a notch towards their
+     * respective destinations
+     */
+    void update_vehicles();
+
+    /**
+     * @brief prepare_connections Assigns routes for each connection from each line
+     */
+    void prepare_connections();
 };
 
 #endif

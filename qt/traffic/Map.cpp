@@ -6,6 +6,7 @@
 
 #include "Map.h"
 #include "Stop.h"
+#include "utilities.h"
 #include <QDebug>
 #include <QFile>
 #include <string>
@@ -69,17 +70,22 @@ void Map::load_streets(const char *filename){
                 return;
             }
         }
+
         /* Trim the whitespace characters from the street name */
-        std::string street_name = std::regex_replace(cells[0].toStdString(), std::regex("^\\s+"), std::string(""));
-        street_name = std::regex_replace(street_name, std::regex("\\s+$"), std::string(""));
+        std::string street_name = strip_whitespace(cells[0].toStdString());
+
+        /* Check for duplicate streets */
+        auto street = this->streets.find(street_name);
+        if (street != this->streets.end()) {
+            std::cerr << "Error: stop csv - the street "<<street_name<<" already exists\n";
+            this->delete_streets();
+            return;
+        }
 
         /* Add the new street */
         Street *s = new Street(street_name, coords[0], coords[1], coords[2], coords[3]);
         this->streets.insert(std::pair<std::string, Street *>(street_name, s));
     }
-}
-
-void Map::find_crossroads() {
 }
 
 void Map::load_stops(const char *filename){
@@ -131,11 +137,18 @@ void Map::load_stops(const char *filename){
         }
 
         /* Trim the whitespace characters from the stop name */
-        std::string stop_name = std::regex_replace(cells[1].toStdString(), std::regex("^\\s+"), std::string(""));
-        stop_name = std::regex_replace(stop_name, std::regex("\\s+$"), std::string(""));
+        std::string stop_name = strip_whitespace(cells[1].toStdString());
 
-        /* Add the new street */
-        Stop *s = new Stop(street->second, cells[1].toStdString(), pos);
+        /* Check for duplicate names */
+        auto find = this->stops.find(stop_name);
+        if (find != this->stops.end()) {
+            std::cerr << "Error: The stop "<<stop_name<<" already exists\n";
+            this->delete_stops();
+            return;
+        }
+
+        /* Add the new stop */
+        Stop *s = new Stop(street->second, stop_name, pos);
         this->stops.insert(std::pair<std::string, Stop *>(s->name(), s));
     }
 }

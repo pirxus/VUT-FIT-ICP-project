@@ -1,9 +1,9 @@
-Nadrazni, 0, 0, 0, -150  
-Strojirenska, 0, -150, 100, -150 
-Smetanova, 100, -150, 0, 0 
-Palackeho, 0, 0, 200, 200
-Vlhka, 200, 200, 100, -150
-Neumannova, 100, -150 , 250, 10
-Dlouha, 250, 10, 300, -50
-Vodni, 300, -50, 100, -150
-Strossova, 250, 10, 200, 200
+Nadrazni, 0, 0, 0, -300  
+Strojirenska, 0, -300, 200, -300 
+Smetanova, 200, -300, 0, 0 
+Palackeho, 0, 0, 400, 400
+Vlhka, 400, 400, 200, -300
+Neumannova, 200, -300 , 500, 20 
+Dlouha, 500, 20, 600, -100
+Vodni, 600, -100, 200, -300
+Strossova, 500, 20, 400, 400

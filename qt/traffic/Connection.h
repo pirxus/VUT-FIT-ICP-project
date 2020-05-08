@@ -15,6 +15,8 @@
 #include <list>
 #include <QPoint>
 #include <QTime>
+#include "Street.h"
+#include "Waypoint.h"
 
 /* Forward declarations.. */
 class Stop;
@@ -22,37 +24,50 @@ class Crossroads;
 class Line;
 
 class Connection {
-    Line *m_line; /* parent line of the connection */
+    Line *m_line; /**< The parent line of the connection */
 
-    /* Stop - time pairs defining the base schedule for this connection */
-    std::list<std::pair<Stop *, QTime>> m_schedule; //TODO time
+    /**
+     * @brief Stop - time pairs defining the base schedule for this connection */
+    std::vector<std::pair<Stop *, QTime>> m_schedule;
 
-    /* A list of waypoints for the connection - one of the two pair members is always
-     * a nullptr */
-    std::list<std::pair<Crossroads *, Stop *>> m_route;
+    /** @brief A list of waypoints for the connection - the first element is the next coordinate
+     * on the route and the second and the third point to a stop/street or a nullptr */
+    std::vector<Waypoint> m_route;
 
     unsigned route_index; /**< The upcoming stop/crossroads in the m_route list */
     unsigned m_delay; /**< The current delay of the connection */
+    QPointF m_position; /**< The current position of the vehicle on the map */
 
 public:
-    QPoint position; /**< The current position of the vehicle on the map */
     bool active; /**< Indicates, whether the vehicle is on duty */
 
-    /** Connection constructors */
-    Connection(Line *line, std::list<Stop *> stops, std::list<QTime> times);
+    /**< Connection constructors */
+    Connection(Line *line, std::vector<Stop *> stops, std::vector<QTime> times);
 
-    std::list<std::pair<Stop *, QTime>> get_schedule() { return this->m_schedule; }
-    void set_schedule(std::list<std::pair<Stop *, int>> schedule);
-    void add_to_schedule(std::pair<Stop *, int> stop);
+    /**
+     * @brief Fetches the route from the parent line and updates m_route */
     void update_route();
-    void update_position(int time);
+
+    /**
+     * @brief Updates the position of the connection relative to the current time and
+     * connection delay
+     * @param time The time point to jump to
+     */
+    void update_position(QTime time);
+
+    /**
+     * @brief set_schedule Sets the schedule for this connection. This method
+     * is only used by the constructor and the schedules should not be altered
+     * @param stops The list of stops on the route
+     * @param times The timetable corresponding to the stops
+     */
+    void set_schedule(std::vector<Stop *> stops, std::vector<QTime> times);
+    std::vector<std::pair<Stop *, QTime>> get_schedule() { return this->m_schedule; }
 
     // refernece - open to alterations...
-    std::list<std::pair<Crossroads *, Stop *>> *get_route() {
-        return &this->m_route;
-    }
+    std::vector<Waypoint> *get_route() { return &this->m_route; }
     unsigned get_delay() { return this->m_delay; }
-    QPoint get_position() { return this->position; }
+    QPointF get_pos() { return this->m_position; }
 };
 
 #endif

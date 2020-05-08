@@ -17,26 +17,28 @@ CONFIG += c++17
 
 SOURCES += \
     Connection.cpp \
-    Crossroads.cpp \
     Line.cpp \
     Map.cpp \
     PublicTransport.cpp \
     Stop.cpp \
     Street.cpp \
+    Waypoint.cpp \
     main.cpp \
     mainwindow.cpp \
-    scene.cpp
+    scene.cpp \
+    utilities.cpp
 
 HEADERS += \
     Connection.h \
-    Crossroads.h \
     Line.h \
     Map.h \
     PublicTransport.h \
     Stop.h \
     Street.h \
+    Waypoint.h \
     mainwindow.h \
-    scene.h
+    scene.h \
+    utilities.h
 
 FORMS += \
     mainwindow.ui
