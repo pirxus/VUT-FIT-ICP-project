@@ -15,13 +15,14 @@
 #include <map>
 #include "Street.h"
 #include "Crossroads.h"
+#include "Stop.h"
 
 class Map {
     std::vector<Crossroads *> m_cross; /**< A vector of all crossroads on the map */
 
 public:
     std::map<std::string, Street *> streets; /**< A hash table of all the streets on the map */
-    std::vector<Stop *> stops; /**< A vector of all the stops on the map */
+    std::map<std::string, Stop *> stops; /**< A vector of all the stops on the map */
 
     /**
     * @brief Map destructor - clears all the vector attributes

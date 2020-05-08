@@ -15,9 +15,10 @@
 #include <vector>
 #include <QColor>
 #include "Street.h"
+#include "Stop.h"
+#include "Crossroads.h"
 
 /* Forward declarations.. */
-class Stop;
 class Connection;
 
 class Line {
@@ -25,20 +26,22 @@ class Line {
     QColor m_color; /* Line color */
 
     std::list<Stop *> m_stops; /**< An ordered list of stops along the line */
-    std::vector<Connection *> m_connections; /**< A vector of all the connections */
-    std::vector<Street *> m_route;
+    //std::list<Crossroads *, Stop *> m_route;
 
 public:
+    std::vector<Connection *> connections; /**< A vector of all the connections */
     /**
      * @brief Line object constructor
      * @param line_number The line number/id
      * @param color The line color - this will be displayed on the map
      */
-    Line(unsigned line_number, QColor color): m_number{line_number}, m_color{color} {}
+    Line(unsigned line_number, QColor color, std::list<Stop *> stops):
+        m_number{line_number}, m_color{color}, m_stops{stops} {}
 
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);
-    void set_color(char color);
+    void set_color(QColor color);
+    QColor get_color() { return this->m_color; }
 };
 
 #endif

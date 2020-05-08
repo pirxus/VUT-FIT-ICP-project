@@ -16,18 +16,21 @@ MainWindow::MainWindow(QWidget *parent)
     initScene();
     initTraffic();
 
-
+    /* Setup button signals */
     connect(ui->zoomInButton, &QPushButton::clicked, this, &MainWindow::zoomIn);
     connect(ui->zoomOutButton, &QPushButton::clicked, this, &MainWindow::zoomOut);
     connect(ui->zoomSlider, &QSlider::valueChanged, this, &MainWindow::sliderZoom);
 
+    /* Setup top menu actions */
     connect(ui->actionLoad_map, &QAction::triggered, this, &MainWindow::load_map);
     connect(ui->actionLoad_stops, &QAction::triggered, this, &MainWindow::load_stops);
+    connect(ui->actionLoad_lines, &QAction::triggered, this, &MainWindow::load_lines);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete transit;
 }
 
 void MainWindow::zoomIn()
@@ -54,13 +57,18 @@ void MainWindow::load_map()
     std::string path = QFileInfo(file).absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the map */
-    transit.load_map(path.c_str());
+    transit->load_map(path.c_str());
 
     /* And display it... */
-    for (auto it = transit.map.streets.begin(); // Streets
-        it != transit.map.streets.end(); it++) {
-        this->ui->graphicsView->scene()->addLine((*it).second->start.x(), (*it).second->start.y(),
+    for (auto it = transit->map.streets.begin(); // Streets
+        it != transit->map.streets.end(); it++) {
+        auto line = this->ui->graphicsView->scene()->addLine((*it).second->start.x(), (*it).second->start.y(),
                      (*it).second->end.x(), (*it).second->end.y());
+
+        /* Set street name labels.. */
+        auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
+        text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
+                     ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
     }
 }
 
@@ -71,16 +79,28 @@ void MainWindow::load_stops()
     std::string path = QFileInfo(file).absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the stops */
-    transit.load_stops(path.c_str());
-    for (auto it = transit.map.stops.begin(); // Stops
-         it != transit.map.stops.end(); it++) {
-        this->ui->graphicsView->scene()->addEllipse((*it)->pos.x()-5, (*it)->pos.y()-5, 10, 10, QPen({Qt::red}, 3), QBrush(Qt::black, Qt::SolidPattern));
+    transit->load_stops(path.c_str());
+    for (auto it = transit->map.stops.begin(); // Stops
+         it != transit->map.stops.end(); it++) {
+        this->ui->graphicsView->scene()->addEllipse(
+                    (*it).second->pos.x()-5, (*it).second->pos.y()-5, 10, 10,
+                    QPen({Qt::red}, 3), QBrush(Qt::black, Qt::SolidPattern));
     }
+}
+
+void MainWindow::load_lines()
+{
+    QString file = QFileDialog::getOpenFileName(this, "Get Any File");
+    if (file == nullptr) return;
+    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+
+    /* Let the PublicTransport module load the lines */
+    transit->load_lines(path.c_str());
 }
 
 void MainWindow::initTraffic()
 {
-    this->transit = PublicTransport();
+    this->transit = new PublicTransport(this);
 }
 
 void MainWindow::initScene()
@@ -98,6 +118,5 @@ void MainWindow::initScene()
 
     this->scene->addEllipse(200, 200 , 200, 100);
     */
-
 }
 

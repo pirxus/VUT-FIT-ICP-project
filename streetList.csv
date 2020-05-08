@@ -3,6 +3,7 @@ Strojirenska, 0, -150, 100, -150
 Smetanova, 100, -150, 0, 0 
 Palackeho, 0, 0, 200, 200
 Vlhka, 200, 200, 100, -150
-Neumannova, 100, -150 , 50, -100
-Dlouha, 50, -100, 300, -50
+Neumannova, 100, -150 , 250, 10
+Dlouha, 250, 10, 300, -50
 Vodni, 300, -50, 100, -150
+Strossova, 250, 10, 200, 200

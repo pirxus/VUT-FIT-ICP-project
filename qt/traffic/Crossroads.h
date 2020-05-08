@@ -25,7 +25,6 @@ public:
 
     QPoint get_pos() { return this->m_pos; }
     std::pair<Street *, Street *> get_streets() { return this->m_streets; }
-
 };
 
 #endif

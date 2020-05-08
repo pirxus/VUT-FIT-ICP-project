@@ -17,7 +17,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    PublicTransport transit; /**< The controller of the program logic */
 
 private slots:
     void zoomIn();
@@ -25,10 +24,13 @@ private slots:
     void sliderZoom(int z);
     void load_map();
     void load_stops();
+    void load_lines();
+
 
 private:
     void initTraffic(); /**< Creates a public transport object */
     void initScene();
+    PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

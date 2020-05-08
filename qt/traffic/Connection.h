@@ -14,6 +14,7 @@
 #include <sstream>
 #include <list>
 #include <QPoint>
+#include <QTime>
 
 /* Forward declarations.. */
 class Stop;
@@ -24,22 +25,23 @@ class Connection {
     Line *m_line; /* parent line of the connection */
 
     /* Stop - time pairs defining the base schedule for this connection */
-    std::list<std::pair<Stop *, int>> m_schedule; //TODO time
+    std::list<std::pair<Stop *, QTime>> m_schedule; //TODO time
 
     /* A list of waypoints for the connection - one of the two pair members is always
      * a nullptr */
     std::list<std::pair<Crossroads *, Stop *>> m_route;
 
-    unsigned m_delay;
+    unsigned route_index; /**< The upcoming stop/crossroads in the m_route list */
+    unsigned m_delay; /**< The current delay of the connection */
 
 public:
-    QPoint position;
+    QPoint position; /**< The current position of the vehicle on the map */
+    bool active; /**< Indicates, whether the vehicle is on duty */
 
     /** Connection constructors */
-    Connection(Line *line): m_line{line}, m_delay{0} {}
-    Connection(Line *line, std::list<std::pair<Stop *, int>> schedule):
-        m_line{line}, m_schedule{schedule}, m_delay{0} {}
+    Connection(Line *line, std::list<Stop *> stops, std::list<QTime> times);
 
+    std::list<std::pair<Stop *, QTime>> get_schedule() { return this->m_schedule; }
     void set_schedule(std::list<std::pair<Stop *, int>> schedule);
     void add_to_schedule(std::pair<Stop *, int> stop);
     void update_route();
@@ -49,7 +51,6 @@ public:
     std::list<std::pair<Crossroads *, Stop *>> *get_route() {
         return &this->m_route;
     }
-    std::list<std::pair<Stop *, int>> get_schedule() { return this->m_schedule; }
     unsigned get_delay() { return this->m_delay; }
     QPoint get_position() { return this->position; }
 };

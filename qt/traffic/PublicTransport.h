@@ -8,17 +8,21 @@
 #define PUBLIC_TRANSPORT_H
 
 #include <vector>
+#include <QTimer>
+#include <QTime>
 #include "Map.h"
 #include "Line.h"
 #include "Stop.h"
 
 class PublicTransport {
-    std::vector<Line *> m_lines;
-    int time;
+    QTime m_time;
+    QTimer *m_timer;
 public:
     Map map;
+    std::vector<Line *> lines;
 
-    PublicTransport(): map{Map()} {}
+    PublicTransport(QObject *parent);
+    ~PublicTransport();
 
 	/**
     * @brief loads streets from a csv file
@@ -37,7 +41,14 @@ public:
     * @param filename
     * @param all_stops vector of all_stops
     */
-    //void load_lines(const char* filename, std::vector<Stop * > all_stops);
+    void load_lines(const char* filename);
+
+    QTime get_time() { return this->m_time; }
+    void set_time(QTime time) { this->m_time = time; } //TODO
+    void set_timeout(unsigned timeout); /**< Sets the clock speed */ //TODO
+
+    void delete_lines();
+
 };
 
 #endif

@@ -8,6 +8,8 @@
 #include "Stop.h"
 #include <QDebug>
 #include <QFile>
+#include <string>
+#include <regex>
 
 Map::~Map()
 {
@@ -26,7 +28,7 @@ void Map::delete_streets()
 void Map::delete_stops()
 {
    for (auto el : this->stops) {
-       delete el;
+       delete el.second;
    }
    this->stops.clear();
 }
@@ -67,10 +69,13 @@ void Map::load_streets(const char *filename){
                 return;
             }
         }
+        /* Trim the whitespace characters from the street name */
+        std::string street_name = std::regex_replace(cells[0].toStdString(), std::regex("^\\s+"), std::string(""));
+        street_name = std::regex_replace(street_name, std::regex("\\s+$"), std::string(""));
 
         /* Add the new street */
-        Street *s = new Street(cells[0].toStdString(), coords[0], coords[1], coords[2], coords[3]);
-        this->streets.insert(std::pair<std::string, Street *>(cells[0].toStdString(), s));
+        Street *s = new Street(street_name, coords[0], coords[1], coords[2], coords[3]);
+        this->streets.insert(std::pair<std::string, Street *>(street_name, s));
     }
 }
 
@@ -124,8 +129,13 @@ void Map::load_stops(const char *filename){
             this->delete_stops();
             return;
         }
+
+        /* Trim the whitespace characters from the stop name */
+        std::string stop_name = std::regex_replace(cells[1].toStdString(), std::regex("^\\s+"), std::string(""));
+        stop_name = std::regex_replace(stop_name, std::regex("\\s+$"), std::string(""));
+
         /* Add the new street */
         Stop *s = new Stop(street->second, cells[1].toStdString(), pos);
-        this->stops.push_back(s);
+        this->stops.insert(std::pair<std::string, Stop *>(s->name(), s));
     }
 }
