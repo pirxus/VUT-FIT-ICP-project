@@ -17,7 +17,6 @@ CONFIG += c++17
 
 SOURCES += \
     Connection.cpp \
-    Coords.cpp \
     Crossroads.cpp \
     Line.cpp \
     Map.cpp \
@@ -30,7 +29,6 @@ SOURCES += \
 
 HEADERS += \
     Connection.h \
-    Coords.h \
     Crossroads.h \
     Line.h \
     Map.h \

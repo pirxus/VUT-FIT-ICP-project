@@ -6,37 +6,46 @@
 
 #include "Map.h"
 #include "Stop.h"
+#include <QDebug>
+#include <QFile>
 
 void Map::load_streets(const char *filename){
-	std::ifstream file(filename);
-	std::string line;
-	std::vector<std::string> row;
-	std::vector<int> coordinates;
-	while (getline(file, line)) {
-		std::string word;
-		row.clear();
-		coordinates.clear();
-		std::stringstream ss(line);
-		while (getline(ss, word, ',')) {
-            // add all the column data
-            // of a row to a vector
-            	row.push_back(word);
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        std::cerr << "Error: could not open csv street file\n";
+        return;
+    }
+
+    //QStringList cells;
+    while(!file.atEnd()) {
+        QByteArray line = file.readLine();
+        QList<QByteArray> cells = line.split(',');
+
+        if (cells.size() != 5) {
+            std::cerr << "Error: invalid street csv file format\n";
+            return;
         }
-        for (unsigned int i = 1; i < row.size();i++){
-            		try {
-            			int num = std::stoi(row.at(i));
-            			coordinates.push_back(num);
-            		}
-            		//TODO Propagate
-            		catch (std::invalid_argument const &e) {
-            			std::cerr << "Bad input: std::invalid_argument thrown" << '\n';
-            		}
-            		catch (std::out_of_range const &e) {
-            			std::cerr << "Integer is out of range: std::out_of_range thrown" << '\n';
-            		}
-            	}
-        Street *s = new Street(row[0], coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
- 		this->m_streets.push_back(s);
+
+        // Extract the coords
+        std::vector<int> coords;
+        for (unsigned i = 1; i < 5; i++) {
+            try {
+                int num = std::stoi(cells.at(i).toStdString());
+                coords.push_back(num);
+            }
+            catch (std::invalid_argument const &e) {
+                std::cerr << "Bad input: std::invalid_argument thrown" << '\n';
+                return;
+            }
+            catch (std::out_of_range const &e) {
+                std::cerr << "Integer is out of range: std::out_of_range thrown" << '\n';
+                return;
+            }
+        }
+
+        /* Add the new street */
+        Street *s = new Street(cells[0].toStdString(), coords[0], coords[1], coords[2], coords[3]);
+        this->streets.push_back(s);
     }
 }
 

@@ -8,7 +8,7 @@
 #define STOP_H
 
 #include <string>
-#include "Coords.h"
+#include <QPoint>
 
 /* Forward declarations */
 class Street;
@@ -16,10 +16,10 @@ class Street;
 class Stop {
     std::string m_name;
 public:
-    Coords pos;
+    QPoint pos;
     Street *street;
 
-    Stop(Coords pos, Street *street): pos{pos}, street{street} {}
+    Stop(QPoint pos, Street *street): pos{pos}, street{street} {}
 
 	/**
 	* @brief Street constructor

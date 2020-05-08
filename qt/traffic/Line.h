@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file Line.h
  * @brief
  * @author
@@ -13,32 +13,32 @@
 #include <sstream>
 #include <list>
 #include <vector>
+#include <QColor>
+#include "Street.h"
 
 /* Forward declarations.. */
 class Stop;
 class Connection;
 
 class Line {
-    unsigned m_line_no; /* Line number */
-    char m_color; /* Line color */
+    unsigned m_number; /* Line number */
+    QColor m_color; /* Line color */
 
-    /* An ordered list of stops along the line */
-    std::list<Stop *> m_stops;
-    std::vector<Connection *> m_connections; /* A vector of all connections on the line */
+    std::list<Stop *> m_stops; /**< An ordered list of stops along the line */
+    std::vector<Connection *> m_connections; /**< A vector of all the connections */
+    std::vector<Street *> m_route;
 
 public:
-    Line(): m_line_no{0}, m_color{0} {}
-    Line(unsigned line_number, char color): m_line_no{line_number}, m_color{color} {}
+    /**
+     * @brief Line object constructor
+     * @param line_number The line number/id
+     * @param color The line color - this will be displayed on the map
+     */
+    Line(unsigned line_number, QColor color): m_number{line_number}, m_color{color} {}
 
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);
     void set_color(char color);
-
-    /**
-    * @brief load lines and connections from file
-    * @param filename
-    */
-    void load_lines(const char* filename,std::vector<Stop * > all_stops);
 };
 
 #endif

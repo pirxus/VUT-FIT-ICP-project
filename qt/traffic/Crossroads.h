@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file Crossroads.h
  * @brief
  * @author
@@ -8,22 +8,22 @@
 #define CROSSROADS_H
 
 #include <utility>
-#include "Coords.h"
+#include <QPoint>
 
 /* Forward declarations.. */
 class Street;
 
 class Crossroads {
-    Coords m_pos;
+    QPoint m_pos;
     std::pair<Street *, Street *> m_streets; /* A pair of the two crossing streets */
 
 public:
 
-    Crossroads(): m_pos{Coords()} {}
-    Crossroads(Coords pos, Street *ver, Street *hor):
+    Crossroads(): m_pos{QPoint()} {}
+    Crossroads(QPoint pos, Street *ver, Street *hor):
         m_pos{pos}, m_streets{std::pair<Street *, Street *>(ver, hor)} {}
 
-    Coords get_pos() { return this->m_pos; }
+    QPoint get_pos() { return this->m_pos; }
     std::pair<Street *, Street *> get_streets() { return this->m_streets; }
 
 };

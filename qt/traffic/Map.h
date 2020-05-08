@@ -16,14 +16,13 @@
 #include "Crossroads.h"
 
 class Map {
-    std::vector<Street *> m_streets; /**< A vector of all the streets on the map */
-    std::vector<Street *> m_streets_v; /**< A vector of vertical streets */
-    std::vector<Street *> m_streets_h; /**< A vector of horizontal streets */
     std::vector<Crossroads *> m_cross; /**< A vector of all crossroads on the map */
     std::vector<Stop *> m_allstops;
 
 public:
-	/**
+    std::vector<Street *> streets; /**< A vector of all the streets on the map */
+
+    /**
 	* @brief load streets from file
  	* @param filename
  	*/

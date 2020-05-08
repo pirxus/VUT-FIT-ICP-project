@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file Street.h
  * @brief
  * @author
@@ -10,32 +10,24 @@
 #include <vector>
 #include <string>
 
-#include "Coords.h"
+#include <QPoint>
 
 /* Forward declarations */
 class Stop;
 
 class Street {
-    Coords m_start;
-    Coords m_end;
-    std::string m_name;
 
     /* A vector of stops that lie on the Street */
     std::vector<Stop *> m_stops;
 
-    /* The current traffic state on the street */
+    /* The current traffic situation on the street */
     int m_traffic;
 
 public:
-    Street(): m_traffic{0} {}
-    bool lies_on_street(Coords point);
-    void add_stop(Stop *stop);
+    QPoint start; /**< The first coordinate */
+    QPoint end; /**< The second coordinate */
+    std::string name; /**< Street name */
 
-    //bool is_correct_street();
-
-    bool is_vertical();
-    bool is_horizontal();
-    
     /**
     * @brief Street constructor
     * @param name name of the street
@@ -45,6 +37,10 @@ public:
     * @param y2 the street end y coordinate
     */
     Street(std::string name, int x1, int y1, int x2, int y2);
+
+    bool lies_on_street(QPoint point);
+    void add_stop(Stop *stop);
+
 };
 
 #endif

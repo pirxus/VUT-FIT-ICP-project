@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsScene>
+#include "PublicTransport.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,12 +17,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QGraphicsScene *scene;
+    PublicTransport transit; /**< The controller of the program logic */
+
 private slots:
     void zoomIn();
     void zoomOut();
     void sliderZoom(int z);
+    void load_map();
 
 private:
+    void initTraffic(); /**< Creates a public transport object */
     void initScene();
     Ui::MainWindow *ui;
 };
