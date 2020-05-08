@@ -12,15 +12,31 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <map>
 #include "Street.h"
 #include "Crossroads.h"
 
 class Map {
     std::vector<Crossroads *> m_cross; /**< A vector of all crossroads on the map */
-    std::vector<Stop *> m_allstops;
 
 public:
-    std::vector<Street *> streets; /**< A vector of all the streets on the map */
+    std::map<std::string, Street *> streets; /**< A hash table of all the streets on the map */
+    std::vector<Stop *> stops; /**< A vector of all the stops on the map */
+
+    /**
+    * @brief Map destructor - clears all the vector attributes
+    */
+    ~Map();
+
+    /**
+    * @brief Clears the streets vector
+    */
+    void delete_streets();
+
+    /**
+    * @brief Clears the stops vector
+    */
+    void delete_stops();
 
     /**
 	* @brief load streets from file
@@ -38,7 +54,7 @@ public:
 	* @brief load allstops from file
  	* @param filename
  	*/
-    void load_all_stops(const char *filename);
+    void load_stops(const char *filename);
 };
 
 #endif

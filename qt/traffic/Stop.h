@@ -8,7 +8,8 @@
 #define STOP_H
 
 #include <string>
-#include <QPoint>
+#include <map>
+#include <QPointF>
 
 /* Forward declarations */
 class Street;
@@ -16,19 +17,16 @@ class Street;
 class Stop {
     std::string m_name;
 public:
-    QPoint pos;
+    QPointF pos;
     Street *street;
 
-    Stop(QPoint pos, Street *street): pos{pos}, street{street} {}
-
 	/**
-	* @brief Street constructor
- 	* @param name_street name of the street
+    * @brief Stop constructor
+    * @param street The pointer to the parent street
  	* @param name name of the stop
- 	* @param x1 the x coordinate
- 	* @param y1 the y coordinate
+    * @param pos The position on the street relative to the street start
  	*/
-    Stop(std::string name_street, std::string name, int x1, int y1);
+    Stop(Street *street, std::string name, float pos);
 
     std::string name() {return m_name;}
 };

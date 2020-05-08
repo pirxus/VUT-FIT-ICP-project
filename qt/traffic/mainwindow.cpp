@@ -16,10 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
     initScene();
     initTraffic();
 
-    connect(ui->actionLoad_map, &QAction::triggered, this, &MainWindow::load_map);
+
     connect(ui->zoomInButton, &QPushButton::clicked, this, &MainWindow::zoomIn);
     connect(ui->zoomOutButton, &QPushButton::clicked, this, &MainWindow::zoomOut);
     connect(ui->zoomSlider, &QSlider::valueChanged, this, &MainWindow::sliderZoom);
+
+    connect(ui->actionLoad_map, &QAction::triggered, this, &MainWindow::load_map);
+    connect(ui->actionLoad_stops, &QAction::triggered, this, &MainWindow::load_stops);
 }
 
 MainWindow::~MainWindow()
@@ -54,9 +57,24 @@ void MainWindow::load_map()
     transit.load_map(path.c_str());
 
     /* And display it... */
-    for (auto it = transit.map.streets.begin();
-         it != transit.map.streets.end(); it++) {
-        auto line = this->scene->addLine((*it)->start.x(), (*it)->start.y(), (*it)->end.x(), (*it)->end.y());
+    for (auto it = transit.map.streets.begin(); // Streets
+        it != transit.map.streets.end(); it++) {
+        this->ui->graphicsView->scene()->addLine((*it).second->start.x(), (*it).second->start.y(),
+                     (*it).second->end.x(), (*it).second->end.y());
+    }
+}
+
+void MainWindow::load_stops()
+{
+    QString file = QFileDialog::getOpenFileName(this, "Get Any File");
+    if (file == nullptr) return;
+    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+
+    /* Let the PublicTransport module load the stops */
+    transit.load_stops(path.c_str());
+    for (auto it = transit.map.stops.begin(); // Stops
+         it != transit.map.stops.end(); it++) {
+        this->ui->graphicsView->scene()->addEllipse((*it)->pos.x()-5, (*it)->pos.y()-5, 10, 10, QPen({Qt::red}, 3), QBrush(Qt::black, Qt::SolidPattern));
     }
 }
 
@@ -67,8 +85,9 @@ void MainWindow::initTraffic()
 
 void MainWindow::initScene()
 {
-    this->scene = new Scene(ui->graphicsView);
-    ui->graphicsView->setScene(this->scene);
+    auto scene = new Scene(ui->graphicsView);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 
     /*
     auto line = scene->addLine(200, 200 , 20, 2);
@@ -79,8 +98,6 @@ void MainWindow::initScene()
 
     this->scene->addEllipse(200, 200 , 200, 100);
     */
-
-    ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 
 }
 

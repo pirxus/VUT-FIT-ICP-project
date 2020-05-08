@@ -18,11 +18,19 @@ class PublicTransport {
 public:
     Map map;
 
+    PublicTransport(): map{Map()} {}
+
 	/**
-    * @brief load streets and load allstops functions
+    * @brief loads streets from a csv file
     * @param filename
     */
 	void load_map(const char *filename);
+
+    /**
+    * @brief loads all stops from a file
+    * @param filename
+    */
+    void load_stops(const char *filename);
 
     /**
     * @brief load lines and connections from file

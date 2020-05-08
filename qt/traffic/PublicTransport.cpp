@@ -8,9 +8,12 @@
 
 
 void PublicTransport::load_map(const char *filename){
-    this->map = Map();
     this->map.load_streets(filename);
-    //load_allstops(filename);
+}
+
+void PublicTransport::load_stops(const char *filename)
+{
+    this->map.load_stops(filename);
 }
 
 //void PublicTransport::load_lines(const char *filename, std::vector<Stop *> all_stops){

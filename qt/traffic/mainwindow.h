@@ -17,7 +17,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QGraphicsScene *scene;
     PublicTransport transit; /**< The controller of the program logic */
 
 private slots:
@@ -25,6 +24,7 @@ private slots:
     void zoomOut();
     void sliderZoom(int z);
     void load_map();
+    void load_stops();
 
 private:
     void initTraffic(); /**< Creates a public transport object */
