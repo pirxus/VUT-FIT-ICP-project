@@ -12,7 +12,7 @@
 class ViewConnection : public QGraphicsEllipseItem
 {
 private:
-    Connection *conn;
+    Connection *m_conn;
 
 public:
     explicit ViewConnection(qreal x = 0, qreal y = 0, qreal width = 8, qreal height = 8, QGraphicsItem *parent = nullptr);

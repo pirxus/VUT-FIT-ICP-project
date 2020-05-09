@@ -27,7 +27,9 @@ SOURCES += \
     mainwindow.cpp \
     scene.cpp \
     utilities.cpp \
-    viewconnection.cpp
+    viewconnection.cpp \
+    viewstop.cpp \
+    viewstreet.cpp
 
 HEADERS += \
     Connection.h \
@@ -40,7 +42,9 @@ HEADERS += \
     mainwindow.h \
     scene.h \
     utilities.h \
-    viewconnection.h
+    viewconnection.h \
+    viewstop.h \
+    viewstreet.h
 
 FORMS += \
     mainwindow.ui

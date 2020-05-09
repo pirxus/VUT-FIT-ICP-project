@@ -3,6 +3,8 @@
 
 #include <QGraphicsScene>
 #include "viewconnection.h"
+#include "viewstreet.h"
+#include "viewstop.h"
 
 class Scene : public QGraphicsScene
 {
@@ -10,11 +12,17 @@ class Scene : public QGraphicsScene
 
 private:
     std::vector<ViewConnection *> m_connections;
+    std::vector<ViewStreet *> m_streets;
+    std::vector<ViewStop *> m_stops;
+
 
 public:
     explicit Scene(QObject *parent = nullptr);
+    ~Scene();
 
     void add_connection(Connection *conn);
+    void add_street(Street *street);
+    void add_stop(Stop *stop);
     void redraw_connections();
 
 protected:
