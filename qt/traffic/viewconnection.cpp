@@ -1,7 +1,7 @@
 ﻿#include "viewconnection.h"
 
 ViewConnection::ViewConnection(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent) :
-    QGraphicsEllipseItem(x, y, width, height, parent)
+    QObject(), QGraphicsEllipseItem(x, y, width, height, parent)
 {
     this->m_size = 8;
     this->setVisible(false);
@@ -34,7 +34,7 @@ void ViewConnection::focusInEvent(QFocusEvent *event)
     rect.setHeight(m_size);
     this->setRect(rect);
     QGraphicsEllipseItem::focusInEvent(event);
-    //emit(this->display_route(this->m_conn->get_line()));
+    emit(this->display_route(this->m_conn->get_line()));
 }
 
 void ViewConnection::focusOutEvent(QFocusEvent *event)
@@ -45,7 +45,7 @@ void ViewConnection::focusOutEvent(QFocusEvent *event)
     rect.setHeight(m_size);
     this->setRect(rect);
     QGraphicsEllipseItem::focusOutEvent(event);
-    //emit(this->clear_route());
+    emit(this->clear_route());
 }
 
 void ViewConnection::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

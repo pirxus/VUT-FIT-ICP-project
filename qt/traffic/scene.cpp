@@ -48,3 +48,13 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 
 }
+
+void Scene::display_route(Line *line)
+{
+
+}
+
+void Scene::clear_route()
+{
+
+}

@@ -2,6 +2,7 @@
 #define VIEWCONNECTION_H
 
 #include <QGraphicsItem>
+#include <QObject>
 #include <QGraphicsEllipseItem>
 #include <QBrush>
 #include <QPen>
@@ -9,8 +10,9 @@
 #include "Line.h"
 
 
-class ViewConnection : public QGraphicsEllipseItem
+class ViewConnection : public QObject, public QGraphicsEllipseItem
 {
+    Q_OBJECT
 private:
     Connection *m_conn;
     int m_size;
@@ -27,8 +29,8 @@ protected:
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 signals:
-    //void display_route(Line *line);
-    //void clear_route();
+    void display_route(Line *line);
+    void clear_route();
 };
 
 #endif // VIEWCONNECTION_H
