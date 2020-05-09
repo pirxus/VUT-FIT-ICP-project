@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "scene.h"
 #include "PublicTransport.h"
+#include "Connection.h"
 #include "ui_mainwindow.h"
 #include <QGraphicsLineItem>
 #include <QGraphicsEllipseItem>
@@ -25,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionLoad_map, &QAction::triggered, this, &MainWindow::load_map);
     connect(ui->actionLoad_stops, &QAction::triggered, this, &MainWindow::load_stops);
     connect(ui->actionLoad_lines, &QAction::triggered, this, &MainWindow::load_lines);
+
+    /* Vehicle updates */
+    connect(transit, &PublicTransport::vehicles_updated, this, &MainWindow::positions_updated);
 }
 
 MainWindow::~MainWindow()
@@ -102,6 +106,19 @@ void MainWindow::load_lines()
     /* Let the PublicTransport module load the lines */
     transit->load_lines(path.c_str());
     transit->prepare_connections();
+}
+
+void MainWindow::positions_updated()
+{
+    for (auto line : transit->lines) {
+        for (auto conn : line->connections) {
+            if (conn->active) {
+                this->ui->graphicsView->scene()->addEllipse(
+                    conn->get_pos().x()-4, conn->get_pos().y()-5, 8, 8,
+                    QPen({Qt::blue}, 1), QBrush(Qt::yellow, Qt::SolidPattern));
+            }
+        }
+    }
 }
 
 void MainWindow::initTraffic()

@@ -11,19 +11,30 @@
 #include <regex>
 
 
-PublicTransport::PublicTransport(QObject *parent)
+
+PublicTransport::PublicTransport(QObject *parent) : QObject(parent)
 {
-   m_time = QTime();
+   m_time = 14*3600 + 1;
    m_timer = new QTimer(parent);
    map = Map();
-   m_time.setHMS(12, 0, 0);
-   m_timer->setInterval(1000);
+   m_clock_rate = 5.0;
+   m_timer->setInterval(1000 / m_clock_rate);
+
+   connect(this->m_timer, &QTimer::timeout, this, &PublicTransport::timer_triggered);
 }
 
 PublicTransport::~PublicTransport()
 {
     this->delete_lines();
     delete this->m_timer;
+}
+
+void PublicTransport::timer_triggered()
+{
+    this->m_time += 10;
+    std::cerr <<this->m_time<<std::endl;
+    this->update_vehicles();
+    emit(this->vehicles_updated());
 }
 
 void PublicTransport::load_map(const char *filename)
@@ -38,7 +49,7 @@ void PublicTransport::load_stops(const char *filename)
 
 void PublicTransport::load_lines(const char *filename)
 {
-    delete_lines(); // First clear the line vector
+    //delete_lines(); // First clear the line vector
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
         std::cerr << "Error: could not open csv line file\n";
@@ -142,19 +153,21 @@ void PublicTransport::load_lines(const char *filename)
                 return;
             }
 
-            /* Now for each time in the connection schedule, convert it to QTime and
+            /* Now for each time in the connection schedule, convert it to our unsigned time and
              * add it to a list */
-            std::vector<QTime> times;
+            std::vector<unsigned> times;
             for (auto cell : cells) {
                 /* Strip the whitespace characterss */
                 std::string cell_str = strip_whitespace(cell.toStdString());
-                QTime time = QTime::fromString(QString(cell_str.c_str()), "hh:mm");
-                if (!time.isValid()) {
+                QTime q_time = QTime::fromString(QString(cell_str.c_str()), "hh:mm");
+                if (!q_time.isValid()) {
                     //TODO delete connections
                     std::cerr << "Error: invalid line csv file format - invalid time format: "<<cell.toStdString()<<"\n";
                     this->delete_lines();
                     return;
                 }
+
+                unsigned time = q_time.hour() * 3600 + q_time.minute() * 60;
                 times.push_back(time);
             }
 
@@ -162,7 +175,11 @@ void PublicTransport::load_lines(const char *filename)
             Connection *conn = new Connection(line_ptr, stops, times);
             line_ptr->connections.push_back(conn);
         }
+        this->lines.push_back(line_ptr);
     }
+
+    /* Start the simulation */
+    this->m_timer->start();
 }
 
 void PublicTransport::delete_lines()

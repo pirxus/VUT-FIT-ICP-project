@@ -7,6 +7,7 @@
 #ifndef PUBLIC_TRANSPORT_H
 #define PUBLIC_TRANSPORT_H
 
+#include <QObject>
 #include <vector>
 #include <QTimer>
 #include <QTime>
@@ -14,14 +15,23 @@
 #include "Line.h"
 #include "Stop.h"
 
-class PublicTransport {
-    QTime m_time;
+class PublicTransport : public QObject {
+    Q_OBJECT
+
+    unsigned m_time;
     QTimer *m_timer;
+    double m_clock_rate;
+
+signals:
+    void vehicles_updated();
+public slots:
+    void timer_triggered();
+
 public:
     Map map;
     std::vector<Line *> lines;
 
-    PublicTransport(QObject *parent);
+    explicit PublicTransport(QObject *parent = nullptr);
     ~PublicTransport();
 
 	/**
@@ -43,8 +53,8 @@ public:
     */
     void load_lines(const char* filename);
 
-    QTime get_time() { return this->m_time; }
-    void set_time(QTime time) { this->m_time = time; } //TODO
+    unsigned get_time() { return this->m_time; }
+    void set_time(unsigned time) { this->m_time = time; } //TODO
     void set_timeout(unsigned timeout); /**< Sets the clock speed */ //TODO
 
     void delete_lines();

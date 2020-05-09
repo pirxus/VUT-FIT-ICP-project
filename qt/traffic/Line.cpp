@@ -14,9 +14,29 @@ void Line::compute_route()
     unsigned street_len = this->m_streets.size();
 
     while(i < stop_len || j < street_len) {
-        Stop *stop = this->m_stops.at(i);
+        Stop *stop;
+        try {
+            stop = this->m_stops.at(i);
+        } catch (const std::out_of_range& e) {
+            stop = nullptr;
+        }
+
         Street *street = this->m_streets.at(j);
-        Street *street_next = this->m_streets.at(j + 1);
+        Street *street_next;
+        try {
+            street_next = this->m_streets.at(j + 1);
+
+        } catch (const std::out_of_range& e) {
+            street_next = nullptr;
+        }
+        if (stop == nullptr) {
+            if (j == street_len - 1) {
+                return; /* The job is done */
+            } else {
+                std::cerr<<"Error: The specified line did not end correctly\n";
+                return;
+            }
+        }
 
         /* Check if the currently processed stop lies on the current street */
         if (stop->street == street) {

@@ -25,6 +25,7 @@ private slots:
     void load_map();
     void load_stops();
     void load_lines();
+    void positions_updated();
 
 
 private:
