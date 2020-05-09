@@ -27,6 +27,7 @@ private slots:
     void load_stops();
     void load_lines();
     void positions_updated();
+    void update_time(unsigned time); /**< Sets the time on the clock */
 
 
 private:

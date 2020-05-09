@@ -34,6 +34,12 @@ void PublicTransport::timer_triggered()
 {
     this->m_time += TIME_INCREMENT;
     if (this->m_time >= 24*3600) { this->m_time = 0; } /* day cycles... */
+    emit(this->time_updated(this->m_time));
+}
+
+void PublicTransport::time_changed(const QTime &time)
+{
+    this->m_time = time.hour()*3600 + time.minute()*60 + time.second();
     this->update_vehicles();
     emit(this->vehicles_updated());
 }

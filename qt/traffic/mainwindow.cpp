@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* Vehicle updates */
     connect(transit, &PublicTransport::vehicles_updated, this, &MainWindow::positions_updated);
+    connect(ui->timeEdit, &QTimeEdit::timeChanged, this->transit, &PublicTransport::time_changed);
+    connect(transit, &PublicTransport::time_updated, this, &MainWindow::update_time);
 }
 
 MainWindow::~MainWindow()
@@ -118,6 +120,11 @@ void MainWindow::load_lines()
 void MainWindow::positions_updated()
 {
     this->scene->redraw_connections();
+}
+
+void MainWindow::update_time(unsigned time)
+{
+    this->ui->timeEdit->setTime(QTime(0, 0).addSecs(time));
 }
 
 void MainWindow::initTraffic()

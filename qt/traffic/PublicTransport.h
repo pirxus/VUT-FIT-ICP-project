@@ -28,9 +28,36 @@ class PublicTransport : public QObject {
     double m_clock_rate;
 
 signals:
+    /**
+     * @brief vehicles_updated This signal notifies the subscribers that
+     * the positions of all vehicles have been updated.
+     */
     void vehicles_updated();
+
+    /**
+     * @brief time_updated After the timer triggers the timer_triggered slot,
+     * this signal then releases the information about what the current time is.
+     * @param time Current simulation time
+     */
+    void time_updated(unsigned time);
+
 public slots:
+
+    /**
+     * @brief timer_triggered This slot is triggered every time the timer
+     * has a timeout. Increments the internal clock by TIME_INCREMENT and
+     * fires the time_updated signal.
+     */
     void timer_triggered();
+
+    /**
+     * @brief time_changed This slot receives the current time from the
+     * clock in the UI and sets it as the internal time. This Allows us to
+     * immediately react to user generated time changes a the small cost
+     * of some wasted energy...
+     * @param time The received time value
+     */
+    void time_changed(const QTime &time);
 
 public:
     Map map;
