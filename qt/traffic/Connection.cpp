@@ -86,7 +86,6 @@ void Connection::update_position(unsigned time) {
                 double frac = dist_progress_segment / segment_len;
                 if (frac > 1.0) frac = 1.0;
                 this->m_position = (this->m_route.at(next).pos - last.pos) * frac + last.pos;
-                std::cerr << this->m_position.x() <<" "<<this->m_position.y()<<std::endl;
             }
         }
     }

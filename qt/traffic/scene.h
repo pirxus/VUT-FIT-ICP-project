@@ -6,6 +6,7 @@
 #include "viewconnection.h"
 #include "viewstreet.h"
 #include "viewstop.h"
+#include "utilities.h"
 
 class Scene : public QGraphicsScene
 {
@@ -16,10 +17,7 @@ private:
     std::vector<ViewStreet *> m_streets;
     std::vector<ViewStop *> m_stops;
 
-    QPainterPath *route_highlight;
-
-
-
+    std::vector<QGraphicsLineItem *> m_displayed_route;
 
 public:
     explicit Scene(QObject *parent = nullptr);

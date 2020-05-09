@@ -109,7 +109,7 @@ void Map::load_stops(const char *filename){
         // Extract the stop position
         float pos;
         try {
-            pos = std::stof(cells.at(2).toStdString());
+            pos = std::stof(strip_whitespace(cells.at(2).toStdString()));
 
         } catch (std::invalid_argument const &e) {
             std::cerr << "Error: stop csv - stop position was not of type float\n";

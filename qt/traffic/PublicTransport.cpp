@@ -14,12 +14,13 @@
 
 PublicTransport::PublicTransport(QObject *parent) : QObject(parent)
 {
-   m_time = 14*3600;
+   m_time = DEFAULT_TIME;
    m_timer = new QTimer(parent);
    map = Map();
-   m_clock_rate = 10.0;
-   m_timer->setInterval(1000 / m_clock_rate);
+   m_clock_rate = DEFAULT_CLOCK_RATE;
+   m_timer->setInterval(DEFAULT_TIMEOUT / m_clock_rate);
 
+   /* Connect the timer timeouts */
    connect(this->m_timer, &QTimer::timeout, this, &PublicTransport::timer_triggered);
 }
 
@@ -31,8 +32,8 @@ PublicTransport::~PublicTransport()
 
 void PublicTransport::timer_triggered()
 {
-    this->m_time += 2;
-    std::cerr <<this->m_time<<std::endl;
+    this->m_time += TIME_INCREMENT;
+    if (this->m_time >= 24*3600) { this->m_time = 0; } /* day cycles... */
     this->update_vehicles();
     emit(this->vehicles_updated());
 }

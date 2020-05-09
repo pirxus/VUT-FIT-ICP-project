@@ -55,9 +55,10 @@ void MainWindow::sliderZoom(int z)
 
 void MainWindow::load_map()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Get Any File");
-    if (file == nullptr) return;
-    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
+    //if (file == nullptr) return;
+    //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../streetList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the map */
     transit->load_map(path.c_str());
@@ -77,9 +78,10 @@ void MainWindow::load_map()
 
 void MainWindow::load_stops()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Get Any File");
-    if (file == nullptr) return;
-    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
+    //if (file == nullptr) return;
+    //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../stopList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the stops */
     transit->load_stops(path.c_str());
@@ -96,9 +98,10 @@ void MainWindow::load_stops()
 
 void MainWindow::load_lines()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Get Any File");
-    if (file == nullptr) return;
-    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
+    //if (file == nullptr) return;
+    //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../lineList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the lines */
     transit->load_lines(path.c_str());

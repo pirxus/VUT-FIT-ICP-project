@@ -15,6 +15,11 @@
 #include "Line.h"
 #include "Stop.h"
 
+#define TIME_INCREMENT 2
+#define DEFAULT_TIME 14*3600
+#define DEFAULT_TIMEOUT 1000
+#define DEFAULT_CLOCK_RATE 10.0f
+
 class PublicTransport : public QObject {
     Q_OBJECT
 
