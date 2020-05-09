@@ -109,7 +109,7 @@ void Map::load_stops(const char *filename){
         // Extract the stop position
         float pos;
         try {
-            pos = std::stof(cells.at(2).toStdString());
+            pos = std::stof(strip_whitespace(cells.at(2).toStdString()));
 
         } catch (std::invalid_argument const &e) {
             std::cerr << "Error: stop csv - stop position was not of type float\n";
@@ -124,6 +124,7 @@ void Map::load_stops(const char *filename){
 
         if (pos <= 0.0 || pos >= 1.0) {
             std::cerr << "Error: stop csv - stop position value has to be in (0, 1)\n";
+            std::cerr << pos << cells.at(0).toStdString() << cells.at(1).toStdString() << "\n";
             this->delete_stops();
             return;
         }
