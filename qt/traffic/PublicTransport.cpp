@@ -14,7 +14,7 @@
 
 PublicTransport::PublicTransport(QObject *parent) : QObject(parent)
 {
-   m_time = 13*3600 + 39*60;
+   m_time = 14*3600;
    m_timer = new QTimer(parent);
    map = Map();
    m_clock_rate = 10.0;
@@ -31,7 +31,7 @@ PublicTransport::~PublicTransport()
 
 void PublicTransport::timer_triggered()
 {
-    this->m_time += 10;
+    this->m_time += 2;
     std::cerr <<this->m_time<<std::endl;
     this->update_vehicles();
     emit(this->vehicles_updated());

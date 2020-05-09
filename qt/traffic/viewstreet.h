@@ -3,6 +3,7 @@
 
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
+#include <QPaintEngine>
 #include "Street.h"
 
 class ViewStreet : public QGraphicsLineItem
