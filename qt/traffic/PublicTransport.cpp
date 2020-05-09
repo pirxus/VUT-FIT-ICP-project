@@ -14,10 +14,10 @@
 
 PublicTransport::PublicTransport(QObject *parent) : QObject(parent)
 {
-   m_time = 14*3600 + 1;
+   m_time = 13*3600 + 39*60;
    m_timer = new QTimer(parent);
    map = Map();
-   m_clock_rate = 5.0;
+   m_clock_rate = 10.0;
    m_timer->setInterval(1000 / m_clock_rate);
 
    connect(this->m_timer, &QTimer::timeout, this, &PublicTransport::timer_triggered);

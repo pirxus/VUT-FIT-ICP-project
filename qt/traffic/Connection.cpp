@@ -66,22 +66,28 @@ void Connection::update_position(unsigned time) {
             /* Find the last passed waypoint */
             Waypoint last = this->m_route.at(s1);
             unsigned next = s1 + 1;
-            for (unsigned i = next; i < s2; i++, next++) {
-                double curr_seg = Waypoint::distance(last, this->m_route.at(i));
-                if (dist_progress - curr_seg <= 0) {
+            unsigned dist_progress_segment = dist_progress;
+            for (; next <= s2; next++) {
+                double curr_seg = Waypoint::distance(last, this->m_route.at(next));
+                segment_len = curr_seg;
+                if (dist_progress_segment - curr_seg <= 0) {
                     break;
                 } else {
-                    dist_progress -= curr_seg;
-                    segment_len -= curr_seg;
-                    last = this->m_route.at(i);
+                    dist_progress_segment -= curr_seg;
+                    last = this->m_route.at(next);
                 }
             }
 
             /* TODO, traffic */
             /* Set the vehicle position */
-            double frac = dist_progress / segment_len;
-            this->m_position = (this->m_route.at(next).pos - last.pos) * frac + last.pos;
-            std::cerr << this->m_position.x() <<" "<<this->m_position.y()<<std::endl;
+            if (segment_len < 0.01) {
+                this->m_position = this->m_route.at(next).pos;
+            } else {
+                double frac = dist_progress_segment / segment_len;
+                if (frac > 1.0) frac = 1.0;
+                this->m_position = (this->m_route.at(next).pos - last.pos) * frac + last.pos;
+                std::cerr << this->m_position.x() <<" "<<this->m_position.y()<<std::endl;
+            }
         }
     }
 }
