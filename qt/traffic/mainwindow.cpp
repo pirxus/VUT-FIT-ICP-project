@@ -1,5 +1,4 @@
 ﻿#include "mainwindow.h"
-#include "scene.h"
 #include "PublicTransport.h"
 #include "Connection.h"
 #include "ui_mainwindow.h"
@@ -106,19 +105,18 @@ void MainWindow::load_lines()
     /* Let the PublicTransport module load the lines */
     transit->load_lines(path.c_str());
     transit->prepare_connections();
+
+    /* Add the loaded connections to our scene */
+    for (auto line : transit->lines) {
+        for (auto conn : line->connections) {
+            this->scene->add_connection(conn);
+        }
+    }
 }
 
 void MainWindow::positions_updated()
 {
-    for (auto line : transit->lines) {
-        for (auto conn : line->connections) {
-            if (conn->active) {
-                this->ui->graphicsView->scene()->addEllipse(
-                    conn->get_pos().x()-4, conn->get_pos().y()-5, 8, 8,
-                    QPen({Qt::blue}, 1), QBrush(Qt::yellow, Qt::SolidPattern));
-            }
-        }
-    }
+    this->scene->redraw_connections();
 }
 
 void MainWindow::initTraffic()
@@ -128,7 +126,7 @@ void MainWindow::initTraffic()
 
 void MainWindow::initScene()
 {
-    auto scene = new Scene(ui->graphicsView);
+    this->scene = new Scene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 

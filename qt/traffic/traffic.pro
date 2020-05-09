@@ -26,7 +26,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     scene.cpp \
-    utilities.cpp
+    utilities.cpp \
+    viewconnection.cpp
 
 HEADERS += \
     Connection.h \
@@ -38,7 +39,8 @@ HEADERS += \
     Waypoint.h \
     mainwindow.h \
     scene.h \
-    utilities.h
+    utilities.h \
+    viewconnection.h
 
 FORMS += \
     mainwindow.ui

@@ -76,6 +76,7 @@ public:
     std::vector<Waypoint> *get_route() { return &this->m_route; }
     int get_delay() { return this->m_delay; }
     QPointF get_pos() { return this->m_position; }
+    Line *get_line() { return this->m_line; }
 };
 
 #endif

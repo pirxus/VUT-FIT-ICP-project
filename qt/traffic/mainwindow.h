@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include "PublicTransport.h"
+#include "scene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,5 +34,6 @@ private:
     void initScene();
     PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
+    Scene *scene;
 };
 #endif // MAINWINDOW_H
