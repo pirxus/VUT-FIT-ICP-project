@@ -39,11 +39,13 @@ MainWindow::~MainWindow()
 void MainWindow::zoomIn()
 {
     this->ui->graphicsView->scale(1.05, 1.05);
+    this->ui->zoomSlider->setValue(this->ui->zoomSlider->value()+1);
 }
 
 void MainWindow::zoomOut()
 {
     this->ui->graphicsView->scale(0.95, 0.95);
+    this->ui->zoomSlider->setValue(this->ui->zoomSlider->value()-1);
 }
 
 void MainWindow::sliderZoom(int z)
