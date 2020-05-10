@@ -49,7 +49,7 @@ void MainWindow::zoomOut()
 void MainWindow::sliderZoom(int z)
 {
     auto t = this->ui->graphicsView->transform();
-    qreal scale = z / 10.0;
+    qreal scale = z / 50.0;
     ui->graphicsView->setTransform(QTransform(scale, t.m12(), t.m21(), scale, t.dx(), t.dy()));
 }
 
