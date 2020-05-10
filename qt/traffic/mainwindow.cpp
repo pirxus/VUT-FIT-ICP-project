@@ -128,6 +128,7 @@ void MainWindow::initScene()
 {
     this->scene = new Scene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
+
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 
     /*
