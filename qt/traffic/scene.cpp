@@ -69,8 +69,8 @@ void Scene::display_route(Line *line)
 
     /* Paint the route lines */
     for (auto item : this->m_displayed_route) {
-        item->setPen(QPen({Qt::red}, 5));
-        item->setOpacity(0.3);
+        item->setPen(QPen(line->get_color(), 5));
+        item->setOpacity(0.6);
         this->addItem(item);
     }
 }

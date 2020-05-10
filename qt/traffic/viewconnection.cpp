@@ -13,7 +13,7 @@ ViewConnection::ViewConnection(qreal x, qreal y, qreal width, qreal height, QGra
 void ViewConnection::set_connection(Connection *conn)
 {
     this->m_conn = conn;
-    this->setBrush(QBrush(QColor{Qt::yellow}, Qt::SolidPattern));
+    this->setBrush(QBrush(conn->get_line()->get_color(), Qt::SolidPattern));
 }
 
 void ViewConnection::redraw()
@@ -21,7 +21,9 @@ void ViewConnection::redraw()
     this->setPos(this->m_conn->get_pos().x() - m_size/2.0, this->m_conn->get_pos().y() - m_size/2.0);
     if (this->m_conn->active) {
         this->setVisible(true);
+
     } else {
+        this->clearFocus(); /* Clear the displayed info about the connection */
         this->setVisible(false);
     }
 }

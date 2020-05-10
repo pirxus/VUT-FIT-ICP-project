@@ -147,7 +147,7 @@ void PublicTransport::load_lines(const char *filename)
         }
 
         /* Construct the new Line */
-        Line *line_ptr = new Line(line_number, Qt::red, stops, streets);
+        Line *line_ptr = new Line(line_number, get_next_color(), stops, streets);
 
         /* Load the connections */
         std::vector<Connection *> conns;
@@ -220,3 +220,10 @@ void PublicTransport::prepare_connections()
 }
 
 
+
+QColor get_next_color()
+{
+    /**< This is an index to the color pallete for our lines. */
+    static unsigned color_index = 0;
+    return line_colors[color_index++ % 10];
+}
