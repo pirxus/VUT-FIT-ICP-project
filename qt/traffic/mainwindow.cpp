@@ -46,13 +46,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::zoomIn()
 {
-    this->ui->graphicsView->scale(1.05, 1.05);
+    this->ui->graphicsView->scale(1.25, 1.25);
     this->ui->zoomSlider->setValue(this->ui->zoomSlider->value()+1);
 }
 
 void MainWindow::zoomOut()
 {
-    this->ui->graphicsView->scale(0.95, 0.95);
+    this->ui->graphicsView->scale(0.75, 0.75);
     this->ui->zoomSlider->setValue(this->ui->zoomSlider->value()-1);
 }
 
@@ -177,6 +177,7 @@ void MainWindow::initScene()
 {
     this->scene = new Scene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
+
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 
     /*

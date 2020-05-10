@@ -37,6 +37,8 @@
       </property>
       <property name="viewportUpdateMode">
        <enum>QGraphicsView::SmartViewportUpdate</enum>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
      </widget>
     </item>
@@ -181,6 +183,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="mouseTracking">
+            <bool>true</bool>
+           </property>
            <property name="layoutDirection">
             <enum>Qt::LeftToRight</enum>
            </property>
@@ -194,7 +199,7 @@
             <number>50</number>
            </property>
            <property name="tracking">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
