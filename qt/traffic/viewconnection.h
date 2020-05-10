@@ -25,12 +25,16 @@ public:
 protected:
     virtual void focusInEvent(QFocusEvent *event) override;
     virtual void focusOutEvent(QFocusEvent *event) override;
+
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 signals:
     void display_route(Line *line);
     void clear_route();
+
+    void display_itinerary(Connection *conn);
+    void clear_itinerary();
 };
 
 #endif // VIEWCONNECTION_H

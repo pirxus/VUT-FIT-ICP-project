@@ -35,6 +35,8 @@ signals:
     void street_selected(Street *street);
     void street_unselected(Street *street);
 
+    void display_itinerary(Connection *conn);
+    void clear_itinerary();
 
 private slots:
     void display_route(Line *line);
@@ -42,6 +44,10 @@ private slots:
 
     void street_selected_slot(Street *street);
     void street_unselected_slot(Street *street);
+
+    void itinerary_displayed_slot(Connection *conn);
+    void itinerary_cleared_slot();
+
 };
 
 #endif // SCENE_H

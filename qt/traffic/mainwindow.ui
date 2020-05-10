@@ -123,13 +123,16 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>220</height>
-          </size>
+        <widget class="QTableWidget" name="itineraryTable">
+         <property name="rowCount">
+          <number>0</number>
          </property>
+         <property name="columnCount">
+          <number>0</number>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -220,7 +223,7 @@
      <x>0</x>
      <y>0</y>
      <width>959</width>
-     <height>24</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -44,6 +44,7 @@ void ViewConnection::focusInEvent(QFocusEvent *event)
 
     /* Notify the scene to display the line route */
     emit(this->display_route(this->m_conn->get_line()));
+    emit(this->display_itinerary(this->m_conn));
 }
 
 void ViewConnection::focusOutEvent(QFocusEvent *event)
@@ -62,6 +63,7 @@ void ViewConnection::focusOutEvent(QFocusEvent *event)
 
     /* Notify the scene to clear the displayed route */
     emit(this->clear_route());
+    emit(this->clear_itinerary());
 }
 
 void ViewConnection::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

@@ -35,6 +35,9 @@ private slots:
 
     void traffic_situation_changed(int level);
 
+    void display_itinerary(Connection *conn);
+    void clear_itinerary();
+
 private:
     void initTraffic(); /**< Creates a public transport object */
     void initScene();

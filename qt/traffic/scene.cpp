@@ -93,10 +93,19 @@ void Scene::clear_route()
 void Scene::street_selected_slot(Street *street)
 {
     emit(street_selected(street));
-
 }
 
 void Scene::street_unselected_slot(Street *street)
 {
     emit(street_unselected(street));
+}
+
+void Scene::itinerary_displayed_slot(Connection *conn)
+{
+    emit(display_itinerary(conn));
+}
+
+void Scene::itinerary_cleared_slot()
+{
+    emit(clear_itinerary());
 }

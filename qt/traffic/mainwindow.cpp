@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h"
 #include <QGraphicsLineItem>
 #include <QGraphicsEllipseItem>
+#include <QTableWidget>
 #include <QFileDialog>
 #include <QDebug>
 
@@ -36,6 +37,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(scene, &Scene::street_selected, this, &MainWindow::street_selected);
     connect(scene, &Scene::street_unselected, this, &MainWindow::street_unselected);
     connect(ui->spinTraffic, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::traffic_situation_changed);
+
+    connect(scene, &Scene::display_itinerary, this, &MainWindow::display_itinerary);
+    connect(scene, &Scene::clear_itinerary, this, &MainWindow::clear_itinerary);
 }
 
 MainWindow::~MainWindow()
@@ -168,6 +172,17 @@ void MainWindow::traffic_situation_changed(int level)
     this->currently_edited_street->set_traffic(level);
 }
 
+void MainWindow::display_itinerary(Connection *conn)
+{
+     //auto m_pTableWidget = new QTableWidget(ui->itineraryTable);
+
+}
+
+void MainWindow::clear_itinerary()
+{
+
+}
+
 void MainWindow::initTraffic()
 {
     this->transit = new PublicTransport(this);
@@ -177,7 +192,6 @@ void MainWindow::initScene()
 {
     this->scene = new Scene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
-
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
 
     /*
