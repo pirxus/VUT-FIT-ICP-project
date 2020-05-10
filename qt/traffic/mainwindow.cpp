@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->zoomOutButton, &QPushButton::clicked, this, &MainWindow::zoomOut);
     connect(ui->zoomSlider, &QSlider::valueChanged, this, &MainWindow::sliderZoom);
 
+    connect(ui->buttonPause, &QPushButton::clicked, this, &MainWindow::toggle_play_pause);
+
     /* Setup top menu actions */
     connect(ui->actionLoad_map, &QAction::triggered, this, &MainWindow::load_map);
     connect(ui->actionLoad_stops, &QAction::triggered, this, &MainWindow::load_stops);
@@ -30,6 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(transit, &PublicTransport::vehicles_updated, this, &MainWindow::positions_updated);
     connect(ui->timeEdit, &QTimeEdit::timeChanged, this->transit, &PublicTransport::time_changed);
     connect(transit, &PublicTransport::time_updated, this, &MainWindow::update_time);
+
+    connect(scene, &Scene::street_selected, this, &MainWindow::street_selected);
+    connect(scene, &Scene::street_unselected, this, &MainWindow::street_unselected);
+    connect(ui->spinTraffic, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::traffic_situation_changed);
 }
 
 MainWindow::~MainWindow()
@@ -127,6 +133,39 @@ void MainWindow::positions_updated()
 void MainWindow::update_time(unsigned time)
 {
     this->ui->timeEdit->setTime(QTime(0, 0).addSecs(time));
+}
+
+void MainWindow::toggle_play_pause()
+{
+    if (this->ui->buttonPause->text() == "Pause") {
+        this->transit->stop_timer();
+        this->ui->buttonPause->setText("Play");
+    } else {
+        this->transit->start_timer();
+        this->ui->buttonPause->setText("Pause");
+    }
+}
+
+void MainWindow::street_selected(Street *street)
+{
+    /* Enable the traffic intensity counter and get the current value */
+    this->ui->spinTraffic->setEnabled(true);
+    this->currently_edited_street = street;
+    this->ui->spinTraffic->setValue(street->get_traffic());
+}
+
+void MainWindow::street_unselected(Street *street)
+{
+    /* Disable the traffic intensity counter */
+    this->ui->spinTraffic->setDisabled(true);
+    if (this->currently_edited_street == street) {
+        this->currently_edited_street = nullptr;
+    }
+}
+
+void MainWindow::traffic_situation_changed(int level)
+{
+    this->currently_edited_street->set_traffic(level);
 }
 
 void MainWindow::initTraffic()

@@ -32,11 +32,16 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 signals:
+    void street_selected(Street *street);
+    void street_unselected(Street *street);
 
 
 private slots:
     void display_route(Line *line);
     void clear_route();
+
+    void street_selected_slot(Street *street);
+    void street_unselected_slot(Street *street);
 };
 
 #endif // SCENE_H

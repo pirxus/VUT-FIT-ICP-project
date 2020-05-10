@@ -6,8 +6,9 @@
 #include <QPaintEngine>
 #include "Street.h"
 
-class ViewStreet : public QGraphicsLineItem
+class ViewStreet : public QObject, public QGraphicsLineItem
 {
+    Q_OBJECT
 private:
     Street *m_street;
 
@@ -17,6 +18,16 @@ public:
 protected:
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+
+    virtual void focusInEvent(QFocusEvent *event) override;
+    virtual void focusOutEvent(QFocusEvent *event) override;
+
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
+signals:
+    void street_selected(Street *street);
+    void street_unselected(Street *street);
+
 };
 
 #endif // VIEWSTREET_H

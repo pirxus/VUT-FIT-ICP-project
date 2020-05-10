@@ -184,9 +184,6 @@ void PublicTransport::load_lines(const char *filename)
         }
         this->lines.push_back(line_ptr);
     }
-
-    /* Start the simulation */
-    this->m_timer->start();
 }
 
 void PublicTransport::delete_lines()
@@ -219,7 +216,17 @@ void PublicTransport::prepare_connections()
     }
 }
 
+void PublicTransport::start_timer()
+{
+    this->m_timer->start();
+}
 
+void PublicTransport::stop_timer()
+{
+    this->m_timer->stop();
+}
+
+/* End of PublicTransport member methods */
 
 QColor get_next_color()
 {

@@ -28,7 +28,12 @@ private slots:
     void load_lines();
     void positions_updated();
     void update_time(unsigned time); /**< Sets the time on the clock */
+    void toggle_play_pause(); /**< Play/Pause event handler */
 
+    void street_selected(Street *street);
+    void street_unselected(Street *street);
+
+    void traffic_situation_changed(int level);
 
 private:
     void initTraffic(); /**< Creates a public transport object */
@@ -36,5 +41,7 @@ private:
     PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
     Scene *scene;
+
+    Street *currently_edited_street;
 };
 #endif // MAINWINDOW_H

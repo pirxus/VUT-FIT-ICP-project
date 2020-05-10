@@ -32,10 +32,17 @@ void ViewConnection::focusInEvent(QFocusEvent *event)
 {
     this->m_size = 14;
     QRectF rect =  this->rect();
+
+    /* resize */
     rect.setWidth(m_size);
     rect.setHeight(m_size);
     this->setRect(rect);
+
+    /* Correct the position offeset */
+    this->setPos(this->m_conn->get_pos().x() - m_size/2.0, this->m_conn->get_pos().y() - m_size/2.0);
     QGraphicsEllipseItem::focusInEvent(event);
+
+    /* Notify the scene to display the line route */
     emit(this->display_route(this->m_conn->get_line()));
 }
 
@@ -43,10 +50,17 @@ void ViewConnection::focusOutEvent(QFocusEvent *event)
 {
     this->m_size = 8;
     QRectF rect =  this->rect();
+
+    /* resize back */
     rect.setWidth(m_size);
     rect.setHeight(m_size);
     this->setRect(rect);
+
+    /* Correct the position offeset */
+    this->setPos(this->m_conn->get_pos().x() - m_size/2.0, this->m_conn->get_pos().y() - m_size/2.0);
     QGraphicsEllipseItem::focusOutEvent(event);
+
+    /* Notify the scene to clear the displayed route */
     emit(this->clear_route());
 }
 

@@ -110,6 +110,16 @@ public:
      * @brief prepare_connections Assigns routes for each connection from each line
      */
     void prepare_connections();
+
+    /**
+     * @brief start_timer Starts the simulation
+     */
+    void start_timer();
+
+    /**
+     * @brief stop_timer Pauses the simulation
+     */
+    void stop_timer();
 };
 
 #endif

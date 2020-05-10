@@ -32,6 +32,10 @@ void Scene::add_street(Street *street)
     ViewStreet *new_street = new ViewStreet(street->start.x(), street->start.y(), street->end.x(), street->end.y());
     this->m_streets.push_back(new_street);
     new_street->set_street(street);
+
+    /* Connect the signals */
+    connect(new_street, &ViewStreet::street_selected, this, &Scene::street_selected_slot);
+    connect(new_street, &ViewStreet::street_unselected, this, &Scene::street_unselected_slot);
     this->addItem(new_street);
 }
 
@@ -69,7 +73,8 @@ void Scene::display_route(Line *line)
 
     /* Paint the route lines */
     for (auto item : this->m_displayed_route) {
-        item->setPen(QPen(line->get_color(), 5));
+
+        item->setPen(QPen(line->get_color(), 5, Qt::DashLine, Qt::RoundCap));
         item->setOpacity(0.6);
         this->addItem(item);
     }
@@ -83,4 +88,15 @@ void Scene::clear_route()
     delete item;
     }
     this->m_displayed_route.clear();
+}
+
+void Scene::street_selected_slot(Street *street)
+{
+    emit(street_selected(street));
+
+}
+
+void Scene::street_unselected_slot(Street *street)
+{
+    emit(street_unselected(street));
 }

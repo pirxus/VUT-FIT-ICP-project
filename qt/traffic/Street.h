@@ -39,8 +39,9 @@ public:
     Street(std::string name, int x1, int y1, int x2, int y2);
 
     bool lies_on_street(QPoint point);
-    void add_stop(Stop *stop);
 
+    int get_traffic() { return this->m_traffic; }
+    void set_traffic(int traffic) { this->m_traffic = traffic; }
 };
 
 #endif
