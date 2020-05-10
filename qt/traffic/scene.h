@@ -35,6 +35,12 @@ signals:
     void street_selected(Street *street);
     void street_unselected(Street *street);
 
+    /**
+     * @brief street_canceled Propagates the notification about a street
+     * being cancelled further to main window
+     * @param street
+     */
+    void street_canceled(ViewStreet *street);
 
 private slots:
     void display_route(Line *line);
@@ -42,6 +48,13 @@ private slots:
 
     void street_selected_slot(Street *street);
     void street_unselected_slot(Street *street);
+
+    /**
+     * @brief street_canceled_slot Notifies the main window that a street has
+     * been marked for cancellation.
+     * @param street
+     */
+    void street_canceled_slot(ViewStreet *street);
 };
 
 #endif // SCENE_H

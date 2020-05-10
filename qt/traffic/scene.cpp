@@ -36,6 +36,7 @@ void Scene::add_street(Street *street)
     /* Connect the signals */
     connect(new_street, &ViewStreet::street_selected, this, &Scene::street_selected_slot);
     connect(new_street, &ViewStreet::street_unselected, this, &Scene::street_unselected_slot);
+    connect(new_street, &ViewStreet::notify_street_cancelled, this, &Scene::street_canceled_slot);
     this->addItem(new_street);
 }
 
@@ -84,8 +85,8 @@ void Scene::clear_route()
 {
     /* Remove every item from display and delete it */
     for (auto item : this->m_displayed_route) {
-    this->removeItem(item);
-    delete item;
+        this->removeItem(item);
+        delete item;
     }
     this->m_displayed_route.clear();
 }
@@ -93,10 +94,14 @@ void Scene::clear_route()
 void Scene::street_selected_slot(Street *street)
 {
     emit(street_selected(street));
-
 }
 
 void Scene::street_unselected_slot(Street *street)
 {
     emit(street_unselected(street));
+}
+
+void Scene::street_canceled_slot(ViewStreet *street)
+{
+    emit(street_canceled(street));
 }

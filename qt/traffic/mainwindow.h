@@ -35,6 +35,9 @@ private slots:
 
     void traffic_situation_changed(int level);
 
+    void street_cancelled(ViewStreet *street);
+    void cancel_street_cancel();
+
 private:
     void initTraffic(); /**< Creates a public transport object */
     void initScene();
@@ -43,5 +46,6 @@ private:
     Scene *scene;
 
     Street *currently_edited_street;
+    ViewStreet *currently_cancelled_street;
 };
 #endif // MAINWINDOW_H

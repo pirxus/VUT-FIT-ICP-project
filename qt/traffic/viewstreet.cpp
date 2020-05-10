@@ -6,6 +6,7 @@ ViewStreet::ViewStreet(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *pa
     this->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
     this->setAcceptHoverEvents(true);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
+    this->setFlag(QGraphicsItem::ItemClipsToShape);
     //this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
@@ -40,11 +41,23 @@ void ViewStreet::focusOutEvent(QFocusEvent *event)
     QGraphicsLineItem::focusOutEvent(event);
 }
 
+void ViewStreet::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    /* Prevent any further actions */
+    this->setSelected(false);
+    this->setPen(QPen(Qt::darkGray, 5, Qt::DashDotDotLine, Qt::RoundCap));
+    this->setAcceptHoverEvents(false);
+    this->setFlag(QGraphicsItem::ItemIsSelectable, false);
+
+    QGraphicsLineItem::mouseDoubleClickEvent(mouseEvent);
+    emit(notify_street_cancelled(this));
+}
+
 QVariant ViewStreet::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemSelectedChange) {
         if (value == true) {
-            this->setPen(QPen(Qt::gray, 5, Qt::SolidLine, Qt::RoundCap));
+            this->setPen(QPen(Qt::darkGray, 5, Qt::SolidLine, Qt::RoundCap));
             this->setAcceptHoverEvents(false);
 
             /* Set the traffic intensity counter on the UI to the current value of the
@@ -59,4 +72,11 @@ QVariant ViewStreet::itemChange(QGraphicsItem::GraphicsItemChange change, const 
     }
 
     return QGraphicsLineItem::itemChange(change, value);
+}
+
+void ViewStreet::closing_cancelled()
+{
+    this->setAcceptHoverEvents(true);
+    this->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    this->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
 }

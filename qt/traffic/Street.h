@@ -23,6 +23,8 @@ class Street {
     /* The current traffic situation on the street */
     int m_traffic;
 
+    bool m_closed;
+
 public:
     QPoint start; /**< The first coordinate */
     QPoint end; /**< The second coordinate */
@@ -42,6 +44,8 @@ public:
 
     int get_traffic() { return this->m_traffic; }
     void set_traffic(int traffic) { this->m_traffic = traffic; }
+    void close_street() { m_closed = true; }
+    void open_street() { m_closed = false; }
 };
 
 #endif

@@ -33,9 +33,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->timeEdit, &QTimeEdit::timeChanged, this->transit, &PublicTransport::time_changed);
     connect(transit, &PublicTransport::time_updated, this, &MainWindow::update_time);
 
+    /* Streets */
     connect(scene, &Scene::street_selected, this, &MainWindow::street_selected);
     connect(scene, &Scene::street_unselected, this, &MainWindow::street_unselected);
     connect(ui->spinTraffic, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::traffic_situation_changed);
+    /* Street closing */
+    connect(scene, &Scene::street_canceled, this, &MainWindow::street_cancelled);
+    connect(ui->buttonBoxClose, &QDialogButtonBox::rejected, this, &MainWindow::cancel_street_cancel);
 }
 
 MainWindow::~MainWindow()
@@ -166,6 +170,25 @@ void MainWindow::street_unselected(Street *street)
 void MainWindow::traffic_situation_changed(int level)
 {
     this->currently_edited_street->set_traffic(level);
+}
+
+void MainWindow::street_cancelled(ViewStreet *street)
+{
+    currently_cancelled_street = street;
+    ui->buttonBoxClose->setEnabled(true);
+    scene->setBackgroundBrush(QBrush(QColor{Qt::gray}, Qt::SolidPattern));
+    ui->labelClose->setText("Please specify the detour for the closed street. Choose the streets in order.");
+}
+
+void MainWindow::cancel_street_cancel()
+{
+    currently_cancelled_street->closing_cancelled();
+
+    /* Reset to the normal state */
+    currently_cancelled_street = nullptr;
+    ui->buttonBoxClose->setEnabled(false);
+    scene->setBackgroundBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
+    ui->labelClose->setText("In order to close a street, choose one and double-click it.");
 }
 
 void MainWindow::initTraffic()
