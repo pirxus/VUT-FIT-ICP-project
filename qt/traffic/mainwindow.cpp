@@ -41,17 +41,19 @@ MainWindow::~MainWindow()
 void MainWindow::zoomIn()
 {
     this->ui->graphicsView->scale(1.05, 1.05);
+    this->ui->zoomSlider->setValue(this->ui->zoomSlider->value()+1);
 }
 
 void MainWindow::zoomOut()
 {
     this->ui->graphicsView->scale(0.95, 0.95);
+    this->ui->zoomSlider->setValue(this->ui->zoomSlider->value()-1);
 }
 
 void MainWindow::sliderZoom(int z)
 {
     auto t = this->ui->graphicsView->transform();
-    qreal scale = z / 10.0;
+    qreal scale = z / 50.0;
     ui->graphicsView->setTransform(QTransform(scale, t.m12(), t.m21(), scale, t.dx(), t.dy()));
 }
 

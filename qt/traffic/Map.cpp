@@ -124,6 +124,7 @@ void Map::load_stops(const char *filename){
 
         if (pos <= 0.0 || pos >= 1.0) {
             std::cerr << "Error: stop csv - stop position value has to be in (0, 1)\n";
+            std::cerr << pos << cells.at(0).toStdString() << cells.at(1).toStdString() << "\n";
             this->delete_stops();
             return;
         }
