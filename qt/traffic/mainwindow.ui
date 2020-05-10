@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -37,8 +37,6 @@
       </property>
       <property name="viewportUpdateMode">
        <enum>QGraphicsView::SmartViewportUpdate</enum>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
      </widget>
     </item>
