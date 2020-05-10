@@ -6,6 +6,7 @@
 
 #include "Connection.h"
 #include "Line.h"
+#include "PublicTransport.h"
 
 Connection::Connection(Line *line, std::vector<Stop *> stops, std::vector<unsigned> times)
 {
@@ -32,7 +33,7 @@ void Connection::set_schedule(std::vector<Stop *> stops, std::vector<unsigned> t
 
 void Connection::update_position(unsigned time) {
     /* First check whether the current time is within the duty window */
-    if (time < this->m_schedule.front().second || time > this->m_schedule.back().second - m_delay) {
+    if (time < this->m_schedule.front().second || time - m_delay > this->m_schedule.back().second) {
         this->active = false;
         this->m_delay = 0;
         this->m_route_index = 0;
@@ -64,28 +65,32 @@ void Connection::update_position(unsigned time) {
             double dist_progress = segment_len * progress; /* Actual distance progress between stops */
 
             /* Find the last passed waypoint */
-            Waypoint last = this->m_route.at(s1);
+            Waypoint wlast = this->m_route.at(s1);
             unsigned next = s1 + 1;
             unsigned dist_progress_segment = dist_progress;
             for (; next <= s2; next++) {
-                double curr_seg = Waypoint::distance(last, this->m_route.at(next));
+                double curr_seg = Waypoint::distance(wlast, this->m_route.at(next));
                 segment_len = curr_seg;
                 if (dist_progress_segment - curr_seg <= 0) {
                     break;
                 } else {
                     dist_progress_segment -= curr_seg;
-                    last = this->m_route.at(next);
+                    wlast = this->m_route.at(next);
                 }
             }
+            Waypoint wnext = this->m_route.at(next);
+            double traffic = this->determine_traffic_situation(wlast, wnext) / 10.0;
 
-            /* TODO, traffic */
             /* Set the vehicle position */
             if (segment_len < 0.01) {
-                this->m_position = this->m_route.at(next).pos;
+                this->m_position = wnext.pos;
             } else {
                 double frac = dist_progress_segment / segment_len;
                 if (frac > 1.0) frac = 1.0;
-                this->m_position = (this->m_route.at(next).pos - last.pos) * frac + last.pos;
+
+                /* compute the delay */
+                this->m_delay += TIME_INCREMENT * traffic;
+                this->m_position = (wnext.pos - wlast.pos) * frac + wlast.pos;
             }
         }
     }
@@ -104,4 +109,26 @@ unsigned Connection::find_schedule_index(unsigned time)
     }
 
     return 0; /* Should not happen... TODO exception */
+}
+
+unsigned Connection::determine_traffic_situation(Waypoint w1, Waypoint w2)
+{
+    /* If one of the waypoints is a stop, then finding the current street
+     * is easy. */
+    if (w1.street == nullptr) {
+        return w1.stop->street->get_traffic();
+
+    } else if (w2.street == nullptr) {
+        return w2.stop->street->get_traffic();
+
+    } else { /* Both waypoints are street endpoints */
+
+        if ((w1.pos == w1.street->start && w2.pos == w1.street->end)
+                || (w1.pos == w1.street->end && w2.pos == w1.street->start)) {
+            return w1.street->get_traffic();
+
+        } else {
+            return w2.street->get_traffic();
+        }
+    }
 }

@@ -35,7 +35,7 @@ class Connection {
     std::vector<Waypoint> m_route;
 
     unsigned m_route_index; /**< The upcoming stop/crossroads in the m_route list */
-    int m_delay; /**< The current delay of the connection */
+    double m_delay; /**< The current delay of the connection */
     QPointF m_position; /**< The current position of the vehicle on the map */
 
 public:
@@ -61,6 +61,15 @@ public:
      * @param time The time the index should correspond to
      */
      unsigned find_schedule_index(unsigned time);
+
+     /**
+      * @brief determine_traffic_situation This function takes two waypoints in between
+      * which the vehicle is present and determines the current street the vehicle is on.
+      * Then the traffic situation on that street is retruned.
+      * @param w1
+      * @param w2
+      */
+     unsigned determine_traffic_situation(Waypoint w1, Waypoint w2);
 
 
     /**
