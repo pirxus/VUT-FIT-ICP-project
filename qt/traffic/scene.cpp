@@ -24,6 +24,8 @@ void Scene::add_connection(Connection *conn)
     connect(new_conn, &ViewConnection::display_route, this, &Scene::display_route);
     connect(new_conn, &ViewConnection::clear_route, this, &Scene::clear_route);
     this->addItem(new_conn);
+    connect(new_conn, &ViewConnection::display_itinerary, this, &Scene::display_itinerary);
+    connect(new_conn, &ViewConnection::clear_itinerary, this, &Scene::clear_itinerary);
 }
 
 void Scene::add_street(Street *street)

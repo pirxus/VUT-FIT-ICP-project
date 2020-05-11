@@ -174,13 +174,36 @@ void MainWindow::traffic_situation_changed(int level)
 
 void MainWindow::display_itinerary(Connection *conn)
 {
-     //auto m_pTableWidget = new QTableWidget(ui->itineraryTable);
-
+     auto schedule = conn->get_schedule();
+     this->ui->itineraryTable->setColumnCount(2);
+     unsigned size = schedule.size();
+     for (unsigned i = 0; i < size; i++){
+         this->ui->itineraryTable->insertRow(i);
+         auto first_item = schedule.at(i).first;
+         //this->ui->itineraryTable->setItem(i, 0, new QTableWidgetItem((first_item)));
+         unsigned second_item = schedule.at(i).second;
+         this->ui->itineraryTable->setItem(i, 1, new QTableWidgetItem(QString::number(second_item)));
+     }
+     this->ui->currentDelay->setText("Current delay: ");
+     int delay = conn->get_delay();
+     this->ui->delayValue->setText(QString::number(delay));
+     this->ui->nextStop->setText("Next stop: ");
+     //int index = conn->find_schedule_index(Qtime);
+     this->ui->lineNumber->setText("Line number: ");
+     int line_number = conn->get_line()->get_line_number();
+     this->ui->lineNumberValue->setText(QString::number(line_number));
 }
 
 void MainWindow::clear_itinerary()
 {
-
+    this->ui->itineraryTable->clear();
+    this->ui->itineraryTable->removeColumn(2);
+    this->ui->currentDelay->clear();
+    this->ui->nextStop->clear();
+    this->ui->lineNumber->clear();
+    this->ui->delayValue->clear();
+    this->ui->lineNumberValue->clear();
+    this->ui->nextStopName->clear();
 }
 
 void MainWindow::initTraffic()

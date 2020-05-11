@@ -49,6 +49,7 @@ public:
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);
     void set_color(QColor color);
+    unsigned get_line_number() { return this->m_number; }
     QColor get_color() { return this->m_color; }
     std::vector<Waypoint> get_route() { return this->m_route; }
 };
