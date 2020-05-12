@@ -10,5 +10,8 @@ test: $(HEAD) $(SRC)
 
 .PHONY: clean
 
+doxygen:
+	$(MAKE) -C src
+
 clean:
-	rm -rf main
+	rm -rf doc/*
