@@ -1,8 +1,10 @@
 ﻿#include "scene.h"
 #include <QDebug>
+#include <QGraphicsSceneMouseEvent>
 
 Scene::Scene(QObject *parent) : QGraphicsScene(parent)
 {
+    canceled_street = nullptr;
 }
 
 Scene::~Scene()
@@ -57,9 +59,29 @@ void Scene::redraw_connections()
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    /* street closing mode */
+    if (this->canceled_street != nullptr) {
+        for (QGraphicsItem *item : items(event->scenePos())) {
+
+            ViewStreet *street = dynamic_cast<ViewStreet *>(item);
+            if (street != nullptr && street != canceled_street) {
+
+                /* Only select open streets */
+                if (street->get_street()->closed()) continue;
+
+                /* If not already present, add the street to the detour vector */
+                if (std::find(detour.begin(), detour.end(), street) == detour.end()) {
+
+                    detour.push_back(street);
+                    /* Repaint the selected street */
+                    street->setPen(QPen(Qt::green, 5, Qt::DashDotLine, Qt::RoundCap));
+                    street->setAcceptHoverEvents(false);
+                }
+            }
+        }
+    }
 
     QGraphicsScene::mousePressEvent(event);
-
 }
 
 void Scene::display_route(Line *line)
@@ -103,5 +125,44 @@ void Scene::street_unselected_slot(Street *street)
 
 void Scene::street_canceled_slot(ViewStreet *street)
 {
+    this->canceled_street = street;
     emit(street_canceled(street));
+}
+
+void Scene::prepare_for_detour()
+{
+    /* Turn off mouse events for all the streets */
+    for (auto street : m_streets) {
+        street->setAcceptedMouseButtons(Qt::NoButton);
+    }
+
+    detour.clear();
+}
+
+void Scene::end_detour_selection(bool correct)
+{
+    /* Turn mouse events back on */
+    for (auto street : m_streets) {
+        if (!street->get_street()->closed()) {
+            street->setAcceptedMouseButtons(Qt::AllButtons);
+        }
+    }
+
+    if (!correct) {
+        /* Bring the closed street back to normal */
+        canceled_street->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
+        canceled_street->setFlag(QGraphicsItem::ItemIsSelectable, true);
+        canceled_street->setAcceptHoverEvents(true);
+    }
+
+    /* Bring the detour street look back to normal */
+    for (auto street : detour) {
+        street->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
+        street->setAcceptHoverEvents(true);
+    }
+
+
+    canceled_street = nullptr;
+    detour.clear();
+
 }

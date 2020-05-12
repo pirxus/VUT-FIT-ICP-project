@@ -78,6 +78,33 @@ void Line::compute_route()
     }
 }
 
+void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::vector<Waypoint> new_route)
+{
+    auto it = std::find(m_streets.begin(), m_streets.end(), closed);
+    if (it == m_streets.end()) {
+        /* Detour does not affect this line... */
+        return;
+    }
+
+    /* Find the index of the cancelled street */
+    unsigned index = std::distance(m_streets.begin(), it);
+
+    /* Edit the original street vector with the detour vector */
+    m_streets_current = std::vector<Street *>(m_streets.begin(), m_streets.begin() + index);
+    m_streets_current.insert(m_streets_current.end(), detour.begin(), detour.end());
+    m_streets_current.insert(m_streets_current.end(), m_streets.begin() + index + 1, m_streets.end());
+
+    /* Edit the m_stops vector - delete all the stops that lie on the closed street */
+    std::vector<Stop *>::iterator iter;
+    for (iter = m_stops.begin(); iter != m_stops.end(); iter++) {
+        if ((*iter)->street == closed) continue;
+        m_stops_current.push_back(*iter);
+    }
+
+
+    //TODO waypoints
+}
+
 void Line::set_color(QColor color) {
     this->m_color = color;
 }

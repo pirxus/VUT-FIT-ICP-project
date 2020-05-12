@@ -120,6 +120,10 @@ public:
      * @brief stop_timer Pauses the simulation
      */
     void stop_timer();
-};
 
+    int create_detour(Street *closed, std::vector<Street *> detour);
+
+    std::vector<Waypoint> compute_waypoints_detour(Street *closed, std::vector<Street *> detour);
+
+};
 #endif

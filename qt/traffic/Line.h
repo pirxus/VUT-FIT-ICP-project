@@ -13,6 +13,7 @@
 #include <sstream>
 #include <list>
 #include <vector>
+#include <algorithm>
 #include <QColor>
 #include "Street.h"
 #include "Stop.h"
@@ -28,6 +29,10 @@ class Line {
     std::vector<Stop *> m_stops; /**< An ordered list of stops along the line */
     std::vector<Street *> m_streets; /**< A vector of streets along the line route */
     std::vector<Waypoint> m_route; /**< A vector of waypoints for the line */
+
+    std::vector<Stop *> m_stops_current; /**< A working copy of m_stops */
+    std::vector<Street *> m_streets_current; /**< A working copy of m_streets */
+    std::vector<Waypoint> m_route_current; /**< A working copy of m_route */
 
 public:
     std::vector<Connection *> connections; /**< A vector of all the connections */
@@ -45,6 +50,7 @@ public:
      */
     void compute_route();
 
+    void implement_detour(Street *closed, std::vector<Street *> detour, std::vector<Waypoint> new_route);
 
     void add_stop(Stop *stop);
     void add_connection(Connection *conn);

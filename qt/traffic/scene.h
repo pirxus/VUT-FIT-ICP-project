@@ -19,6 +19,9 @@ private:
 
     std::vector<QGraphicsLineItem *> m_displayed_route;
 
+    ViewStreet *canceled_street;
+    std::vector<ViewStreet *> detour;
+
 public:
     explicit Scene(QObject *parent = nullptr);
     ~Scene();
@@ -27,6 +30,9 @@ public:
     void add_street(Street *street);
     void add_stop(Stop *stop);
     void redraw_connections();
+    void prepare_for_detour();
+    void end_detour_selection(bool correct);
+    std::vector<ViewStreet *> get_detour() { return detour; }
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -51,7 +57,7 @@ private slots:
 
     /**
      * @brief street_canceled_slot Notifies the main window that a street has
-     * been marked for cancellation.
+     * been marked for cancellation using the street_canceled signal.
      * @param street
      */
     void street_canceled_slot(ViewStreet *street);

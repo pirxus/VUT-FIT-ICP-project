@@ -73,10 +73,3 @@ QVariant ViewStreet::itemChange(QGraphicsItem::GraphicsItemChange change, const 
 
     return QGraphicsLineItem::itemChange(change, value);
 }
-
-void ViewStreet::closing_cancelled()
-{
-    this->setAcceptHoverEvents(true);
-    this->setFlag(QGraphicsItem::ItemIsSelectable, true);
-    this->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
-}

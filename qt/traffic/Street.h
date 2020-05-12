@@ -46,6 +46,7 @@ public:
     void set_traffic(int traffic) { this->m_traffic = traffic; }
     void close_street() { m_closed = true; }
     void open_street() { m_closed = false; }
+    bool closed() { return m_closed; }
 };
 
 #endif

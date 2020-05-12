@@ -226,6 +226,116 @@ void PublicTransport::stop_timer()
     this->m_timer->stop();
 }
 
+int PublicTransport::create_detour(Street *closed, std::vector<Street *> detour)
+{
+    /* First try to get a substitute set of waypoints */
+    std::vector<Waypoint> route = this->compute_waypoints_detour(closed, detour);
+
+    if (route.empty()) {
+        std::cerr << "Detour error: could not create detour\n";
+        return 1;
+    }
+
+    /* Now replace the closed street in all affected lines */
+    closed->close_street();
+    for (auto line : lines) {
+        line->implement_detour(closed, detour, route);
+    }
+    return 0;
+}
+
+std::vector<Waypoint> PublicTransport::compute_waypoints_detour(Street *closed, std::vector<Street *> detour)
+{
+    /* The detour has to start on one of these and end on the other one */
+    QPoint x1 = closed->start;
+    QPoint x2 = closed->end;
+    std::vector<Waypoint> route;
+
+    if (detour.size() < 2) {
+        std::cerr <<"Detour error: the specified detour was too short to be real\n";
+        return route;
+    }
+
+    if ((x1 == detour.front()->start || x1 == detour.front()->end)
+            && (x2 == detour.back()->start || x2 == detour.back()->end)) {
+
+    } else if ((x2 == detour.front()->start || x2 == detour.front()->end)
+            && (x1 == detour.back()->start || x1 == detour.back()->end)) {
+
+        /* reverse the detour vector for consistency */
+        std::reverse(detour.begin(), detour.end());
+
+    } else {
+        std::cerr << "Detour error: the specified detour did not wrap around the closed street properly\n";
+        return route;
+    }
+
+    char last_segment;
+    if (x1 == detour.front()->start) last_segment = 's';
+    else last_segment = 'e';
+
+
+    route.push_back(Waypoint(x1, closed));
+
+    /* Now check that the detour is continuous and fill the route vector */
+    unsigned len = detour.size();
+    for (unsigned i = 1; i < len; i++) {
+
+        if (last_segment == 's') {
+            /* Compare the endpoint of the previous segment */
+            if (detour.at(i)->start == detour.at(i - 1)->end) {
+                last_segment = 's';
+                route.push_back(Waypoint(detour.at(i)->start, detour.at(i)));
+
+            } else if (detour.at(i)->end == detour.at(i - 1)->end) {
+                last_segment = 'e';
+                route.push_back(Waypoint(detour.at(i)->end, detour.at(i)));
+
+            } else {
+                std::cerr << "Detour error: the specified detour did not connect correctly\n";
+                route.clear();
+                return route;
+            }
+
+        } else {
+            /* Compare the startpoint of the previous segment */
+
+            if (detour.at(i)->start == detour.at(i - 1)->start) {
+                last_segment = 's';
+                route.push_back(Waypoint(detour.at(i)->start, detour.at(i)));
+
+            } else if (detour.at(i)->end == detour.at(i - 1)->start) {
+                last_segment = 'e';
+                route.push_back(Waypoint(detour.at(i)->end, detour.at(i)));
+
+            } else {
+                std::cerr << "Detour error: the specified detour did not connect correctly\n";
+                route.clear();
+                return route;
+            }
+        }
+    }
+
+    /* Check if the last segment connects to the ending point of the closed street */
+    if (last_segment == 's') {
+        if (detour.back()->end != x2) {
+            std::cerr << "Detour error: the specified detour did not connect correctly\n";
+            route.clear();
+            return route;
+        }
+
+    } else {
+        if (detour.back()->start != x2) {
+            std::cerr << "Detour error: the specified detour did not connect correctly\n";
+            route.clear();
+            return route;
+        }
+    }
+
+    route.push_back(Waypoint(x2, closed));
+    return route;
+}
+
 /* End of PublicTransport member methods */
 
 QColor get_next_color()

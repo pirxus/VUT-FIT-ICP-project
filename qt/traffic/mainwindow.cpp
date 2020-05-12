@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     initScene();
     initTraffic();
 
+    street_closing_mode = false;
+
     /* Setup button signals */
     connect(ui->zoomInButton, &QPushButton::clicked, this, &MainWindow::zoomIn);
     connect(ui->zoomOutButton, &QPushButton::clicked, this, &MainWindow::zoomOut);
@@ -40,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     /* Street closing */
     connect(scene, &Scene::street_canceled, this, &MainWindow::street_cancelled);
     connect(ui->buttonBoxClose, &QDialogButtonBox::rejected, this, &MainWindow::cancel_street_cancel);
+    connect(ui->buttonBoxClose, &QDialogButtonBox::accepted, this, &MainWindow::accept_street_cancel);
 }
 
 MainWindow::~MainWindow()
@@ -175,17 +178,60 @@ void MainWindow::traffic_situation_changed(int level)
 void MainWindow::street_cancelled(ViewStreet *street)
 {
     currently_cancelled_street = street;
+    street_closing_mode = true;
+
+    /* Block some UI elements for the time being */
+    ui->buttonPause->setEnabled(false);
+    ui->spinTraffic->setEnabled(false);
+    ui->timeEdit->setEnabled(false);
+
     ui->buttonBoxClose->setEnabled(true);
     scene->setBackgroundBrush(QBrush(QColor{Qt::gray}, Qt::SolidPattern));
     ui->labelClose->setText("Please specify the detour for the closed street. Choose the streets in order.");
+    /* Wait for detour specification */
+    scene->prepare_for_detour();
 }
 
 void MainWindow::cancel_street_cancel()
 {
-    currently_cancelled_street->closing_cancelled();
+    /* Inform the scene */
+    scene->end_detour_selection(false);
 
     /* Reset to the normal state */
+    restore_after_cancel();
+}
+
+void MainWindow::accept_street_cancel()
+{
+    /* First extract just the pointers to the street objects from the ViewStreet objects */
+    std::vector<Street *> detour_streets;
+    detour = scene->get_detour();
+    for (auto street : detour) {
+        detour_streets.push_back(street->get_street());
+    }
+
+    /* Try to setup the detour */
+    bool correct;
+    correct = !this->transit->create_detour(currently_cancelled_street->get_street(), detour_streets);
+
+    if (correct) currently_cancelled_street->get_street()->close_street();
+    /* Inform the scene */
+    scene->end_detour_selection(correct);
+
+    /* Reset to the normal state */
+    restore_after_cancel();
+}
+
+void MainWindow::restore_after_cancel()
+{
+    detour.clear();
+    ui->buttonPause->setEnabled(true);
+    ui->spinTraffic->setEnabled(true);
+    ui->timeEdit->setEnabled(true);
+
     currently_cancelled_street = nullptr;
+    street_closing_mode = true;
+
     ui->buttonBoxClose->setEnabled(false);
     scene->setBackgroundBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
     ui->labelClose->setText("In order to close a street, choose one and double-click it.");

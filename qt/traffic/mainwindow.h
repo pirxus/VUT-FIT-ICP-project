@@ -37,15 +37,22 @@ private slots:
 
     void street_cancelled(ViewStreet *street);
     void cancel_street_cancel();
+    void accept_street_cancel();
+
+    void restore_after_cancel();
 
 private:
     void initTraffic(); /**< Creates a public transport object */
     void initScene();
+
     PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
     Scene *scene;
 
     Street *currently_edited_street;
     ViewStreet *currently_cancelled_street;
+
+    bool street_closing_mode;
+    std::vector<ViewStreet *> detour;
 };
 #endif // MAINWINDOW_H
