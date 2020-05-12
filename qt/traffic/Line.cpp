@@ -101,8 +101,89 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
         m_stops_current.push_back(*iter);
     }
 
+    /* Now we need to replace the waypoint sequence that is now unaccessible */
+    QPointF w1 = new_route.front().pos;
+    QPointF w2 = new_route.back().pos;
+    /* The bool in this vector indicates whether the waypoint sequence should be inserted reversed */
+    std::vector<std::tuple<int, int, bool>> index_tuples;
+    int i1 = -1;
+    int i2 = -1;
+    unsigned len = m_route.size();
 
-    //TODO waypoints
+    for (unsigned i = 0; i < len; i++) {
+        /* First, find one of the starting points of the closed street */
+        if (m_route.at(i).pos == w1) {
+            i1 = i;
+
+            /* Now check for the matching end */
+            for (unsigned j = i; j < len; j++) {
+                /* If the sequence of waypoints is to be removed, only stops can be between the two endpoints */
+                if (m_route.at(j).stop != nullptr) {
+                    continue;
+
+                } else if (m_route.at(j).pos == w2) {
+                    i2 = j;
+                    i = j; // skip a few indexes
+                    break;
+
+                } else {
+                    i1 = -1;
+                    i2 = -1;
+                    break;
+                }
+            }
+
+            if (i2 != -1) /* Save the found coordinates */
+                index_tuples.push_back(std::tuple<int, int, bool>(i1, i2, false));
+
+
+        /* Now check for the other direction */
+        } else if (m_route.at(i).pos == w2) {
+            i1 = i;
+
+            /* Now check for the matching end */
+            for (unsigned j = i; j < len; j++) {
+                /* If the sequence of waypoints is to be removed, only stops can be between the two endpoints */
+                if (m_route.at(j).stop != nullptr) {
+                    continue;
+
+                } else if (m_route.at(j).pos == w1) {
+                    i2 = j;
+                    i = j; // skip a few indexes
+                    break;
+
+                } else {
+                    i1 = -1;
+                    i2 = -1;
+                    break;
+                }
+            }
+
+            if (i2 != -1) /* Save the found coordinates *reversed* */
+                index_tuples.push_back(std::tuple<int, int, bool>(i1, i2, true));
+        }
+
+        i1 = i2 = -1;
+    }
+
+    /* Create a reversed copy of new_route */
+    std::vector<Waypoint> new_route_reversed(new_route);
+    std::reverse(new_route_reversed.begin(), new_route_reversed.end());
+    int last_original = 0;
+    /* Now replace the waypoints in between the indexes */
+    for (auto ii : index_tuples) {
+        m_route_current.insert(m_route_current.end(), m_route.begin() + last_original, m_route.begin() + std::get<0>(ii));
+
+        if (std::get<2>(ii) == false)
+            m_route_current.insert(m_route_current.end(), new_route.begin(), new_route.end());
+        else
+            m_route_current.insert(m_route_current.end(), new_route_reversed.begin(), new_route_reversed.end());
+
+        last_original = std::get<1>(ii) + 1;
+    }
+
+    /* Tie up the vector */
+    m_route_current.insert(m_route_current.end(), m_route.begin() + last_original, m_route.end());
 }
 
 void Line::set_color(QColor color) {

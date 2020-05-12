@@ -14,6 +14,7 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <tuple>
 #include <QColor>
 #include "Street.h"
 #include "Stop.h"
