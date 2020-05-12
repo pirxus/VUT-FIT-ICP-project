@@ -4,7 +4,6 @@
 #include "ui_mainwindow.h"
 #include <QGraphicsLineItem>
 #include <QGraphicsEllipseItem>
-#include <QTableWidget>
 #include <QFileDialog>
 #include <QDebug>
 
@@ -72,7 +71,7 @@ void MainWindow::load_map()
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../streetList.csv").absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../examples/streetList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the map */
     transit->load_map(path.c_str());
@@ -95,7 +94,7 @@ void MainWindow::load_stops()
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../stopList.csv").absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../examples/stopList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the stops */
     transit->load_stops(path.c_str());
@@ -115,7 +114,7 @@ void MainWindow::load_lines()
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../lineList.csv").absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../examples/lineList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the lines */
     transit->load_lines(path.c_str());
@@ -175,35 +174,46 @@ void MainWindow::traffic_situation_changed(int level)
 void MainWindow::display_itinerary(Connection *conn)
 {
      auto schedule = conn->get_schedule();
-     this->ui->itineraryTable->setColumnCount(2);
-     unsigned size = schedule.size();
-     for (unsigned i = 0; i < size; i++){
-         this->ui->itineraryTable->insertRow(i);
-         auto first_item = schedule.at(i).first;
-         //this->ui->itineraryTable->setItem(i, 0, new QTableWidgetItem((first_item)));
-         unsigned second_item = schedule.at(i).second;
-         this->ui->itineraryTable->setItem(i, 1, new QTableWidgetItem(QString::number(second_item)));
-     }
      this->ui->currentDelay->setText("Current delay: ");
      int delay = conn->get_delay();
      this->ui->delayValue->setText(QString::number(delay));
      this->ui->nextStop->setText("Next stop: ");
-     //int index = conn->find_schedule_index(Qtime);
+     int index = conn->find_schedule_index(transit->get_time() - delay);
+     this->ui->nextStopName->setText(QString(schedule.at(index + 1).first->name().c_str()));
      this->ui->lineNumber->setText("Line number: ");
      int line_number = conn->get_line()->get_line_number();
      this->ui->lineNumberValue->setText(QString::number(line_number));
+
+     int sch_size = schedule.size() - 1;
+     int line_cord = -60 * sch_size;
+     auto line = itineraryScene->addLine(0, 0, 0, line_cord);
+     line->setPen(QPen(Qt::gray, 10, Qt::SolidLine, Qt::RoundCap));
+     for (int i = 0; i < sch_size + 1; i++){
+     auto text = itineraryScene->addText(QString(schedule.at(i).first->name().c_str()));
+     text->setPos(20, -15 - 60 * i);
+     text->setFont(QFont("Arial" , 10));
+         if (i > index){
+            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
+            stop->setPen(QPen({Qt::black}, 2));
+         }
+         else {
+            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            stop->setBrush(QBrush(QColor{Qt::green}, Qt::SolidPattern));
+            stop->setPen(QPen({Qt::black}, 2));
+         }
+     }
 }
 
 void MainWindow::clear_itinerary()
 {
-    this->ui->itineraryTable->clear();
-    this->ui->itineraryTable->removeColumn(2);
     this->ui->currentDelay->clear();
     this->ui->nextStop->clear();
     this->ui->lineNumber->clear();
     this->ui->delayValue->clear();
     this->ui->lineNumberValue->clear();
     this->ui->nextStopName->clear();
+    qDeleteAll(itineraryScene->items());
 }
 
 void MainWindow::initTraffic()
@@ -216,6 +226,9 @@ void MainWindow::initScene()
     this->scene = new Scene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
+    this->itineraryScene = new Scene(ui->itineraryView);
+    ui->itineraryView->setScene(itineraryScene);
+    ui->itineraryView->setRenderHints(QPainter::Antialiasing);
 
     /*
     auto line = scene->addLine(200, 200 , 20, 2);

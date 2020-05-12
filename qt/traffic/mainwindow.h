@@ -44,7 +44,7 @@ private:
     PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
     Scene *scene;
-
+    QGraphicsScene *itineraryScene;
     Street *currently_edited_street;
 };
 #endif // MAINWINDOW_H
