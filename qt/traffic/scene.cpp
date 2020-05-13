@@ -166,6 +166,7 @@ void Scene::end_detour_selection(bool correct)
 
     canceled_street = nullptr;
     detour.clear();
+}
 
 void Scene::itinerary_displayed_slot(Connection *conn)
 {

@@ -242,6 +242,8 @@ void MainWindow::restore_after_cancel()
     scene->setBackgroundBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
     ui->labelClose->setText("In order to close a street, choose one and double-click it.");
 
+}
+
 void MainWindow::display_itinerary(Connection *conn)
 {
      auto schedule = conn->get_schedule();
@@ -259,10 +261,11 @@ void MainWindow::display_itinerary(Connection *conn)
      int line_cord = -60 * sch_size;
      auto line = itineraryScene->addLine(0, 0, 0, line_cord);
      line->setPen(QPen(Qt::gray, 10, Qt::SolidLine, Qt::RoundCap));
-     for (int i = 0; i < sch_size + 1; i++){
-     auto text = itineraryScene->addText(QString(schedule.at(i).first->name().c_str()));
-     text->setPos(20, -15 - 60 * i);
-     text->setFont(QFont("Arial" , 10));
+     for (int i = 0; i < sch_size + 1; i++) {
+         auto text = itineraryScene->addText(QString(schedule.at(i).first->name().c_str()));
+         text->setPos(20, -15 - 60 * i);
+         text->setFont(QFont("Arial" , 10));
+
          if (i > index){
             auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
             stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
@@ -289,10 +292,6 @@ void MainWindow::clear_itinerary()
 
 void MainWindow::display_street_name()
 {
-        std::string path = QFileInfo("../../examples/streetList.csv").absoluteFilePath().toStdString();
-        // Let the PublicTransport module load the map
-        transit->load_map(path.c_str());
-
         if (this->ui->showStreetNames->isChecked()){
         // And add them to the scene...
             for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
@@ -318,9 +317,6 @@ void MainWindow::display_street_name()
 
 void MainWindow::display_stop_name()
 {
-        std::string path = QFileInfo("../../examples/stopList.csv").absoluteFilePath().toStdString();
-        /* Let the PublicTransport module load the stops */
-        transit->load_stops(path.c_str());
         if (this->ui->showStopNames->isChecked()){
             for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
                 auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
