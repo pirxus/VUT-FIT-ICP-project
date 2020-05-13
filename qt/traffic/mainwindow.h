@@ -1,4 +1,10 @@
-﻿#ifndef MAINWINDOW_H
+﻿/**
+ * @file mainwindow.h
+ * @brief
+ * @author
+ */
+
+#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -41,14 +47,22 @@ private slots:
 
     void restore_after_cancel();
 
+    void display_itinerary(Connection *conn);
+    void clear_itinerary();
+
+    void display_street_name();
+    void display_stop_name();
+    //void display_street_name(Street *streets);
+    //void display_stop_name(Stop *stops);
+
 private:
     void initTraffic(); /**< Creates a public transport object */
-    void initScene();
+    void initScene(); /** Initialize scenes */
 
     PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
     Scene *scene;
-
+    QGraphicsScene *itineraryScene;
     Street *currently_edited_street;
     ViewStreet *currently_cancelled_street;
 

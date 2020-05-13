@@ -1,4 +1,10 @@
-﻿#ifndef SCENE_H
+﻿/**
+ * @file scene.h
+ * @brief
+ * @author
+ */
+
+#ifndef SCENE_H
 #define SCENE_H
 
 #include <QGraphicsScene>
@@ -47,6 +53,8 @@ signals:
      * @param street
      */
     void street_canceled(ViewStreet *street);
+    void display_itinerary(Connection *conn);
+    void clear_itinerary();
 
 private slots:
     void display_route(Line *line);
@@ -61,6 +69,9 @@ private slots:
      * @param street
      */
     void street_canceled_slot(ViewStreet *street);
+    void itinerary_displayed_slot(Connection *conn);
+    void itinerary_cleared_slot();
+
 };
 
 #endif // SCENE_H

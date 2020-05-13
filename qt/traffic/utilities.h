@@ -1,4 +1,10 @@
-﻿#ifndef UTILITIES_H
+﻿/**
+ * @file utilities.h
+ * @brief
+ * @author
+ */
+
+#ifndef UTILITIES_H
 #define UTILITIES_H
 
 #include <QVector>

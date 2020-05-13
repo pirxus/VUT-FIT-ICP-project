@@ -94,6 +94,10 @@ public:
     */
     void load_lines(const char* filename);
 
+    /**
+    * @brief get_time Gets the current time
+    * @return m_time The current time
+    */
     unsigned get_time() { return this->m_time; }
     void set_time(unsigned time) { this->m_time = time; } //TODO
     void set_timeout(unsigned timeout); /**< Sets the clock speed */ //TODO

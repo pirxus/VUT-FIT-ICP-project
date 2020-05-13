@@ -71,7 +71,6 @@ public:
       */
      unsigned determine_traffic_situation(Waypoint w1, Waypoint w2);
 
-
     /**
      * @brief set_schedule Sets the schedule for this connection. This method
      * is only used by the constructor and the schedules should not be altered
@@ -79,10 +78,18 @@ public:
      * @param times The timetable corresponding to the stops
      */
     void set_schedule(std::vector<Stop *> stops, std::vector<unsigned> times);
+
+    /**
+     * @brief get_schedule Returns schedule of this connection.
+     */
     std::vector<std::pair<Stop *, unsigned>> get_schedule() { return this->m_schedule; }
 
     // refernece - open to alterations...
     std::vector<Waypoint> *get_route() { return &this->m_route; }
+
+    /**
+     * @brief get_delay Returns current delay of this connection.
+     */
     int get_delay() { return this->m_delay; }
     QPointF get_pos() { return this->m_position; }
     Line *get_line() { return this->m_line; }

@@ -39,10 +39,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(scene, &Scene::street_selected, this, &MainWindow::street_selected);
     connect(scene, &Scene::street_unselected, this, &MainWindow::street_unselected);
     connect(ui->spinTraffic, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::traffic_situation_changed);
+
     /* Street closing */
     connect(scene, &Scene::street_canceled, this, &MainWindow::street_cancelled);
     connect(ui->buttonBoxClose, &QDialogButtonBox::rejected, this, &MainWindow::cancel_street_cancel);
     connect(ui->buttonBoxClose, &QDialogButtonBox::accepted, this, &MainWindow::accept_street_cancel);
+
+    connect(scene, &Scene::display_itinerary, this, &MainWindow::display_itinerary);
+    connect(scene, &Scene::clear_itinerary, this, &MainWindow::clear_itinerary);
+
+    connect(ui->showStreetNames, &QCheckBox::stateChanged, this, &MainWindow::display_street_name);
+    connect(ui->showStopNames, &QCheckBox::stateChanged, this, &MainWindow::display_stop_name);
 }
 
 MainWindow::~MainWindow()
@@ -75,7 +82,7 @@ void MainWindow::load_map()
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../streetList.csv").absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../examples/streetList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the map */
     transit->load_map(path.c_str());
@@ -98,7 +105,7 @@ void MainWindow::load_stops()
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../stopList.csv").absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../examples/stopList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the stops */
     transit->load_stops(path.c_str());
@@ -106,7 +113,6 @@ void MainWindow::load_stops()
          it != transit->map.stops.end(); it++) {
         this->scene->add_stop((*it).second);
         /*
-        //LABELS
         auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
         text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
         */
@@ -118,7 +124,7 @@ void MainWindow::load_lines()
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../lineList.csv").absoluteFilePath().toStdString();
+    std::string path = QFileInfo("../../examples/lineList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the lines */
     transit->load_lines(path.c_str());
@@ -235,6 +241,102 @@ void MainWindow::restore_after_cancel()
     ui->buttonBoxClose->setEnabled(false);
     scene->setBackgroundBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
     ui->labelClose->setText("In order to close a street, choose one and double-click it.");
+
+void MainWindow::display_itinerary(Connection *conn)
+{
+     auto schedule = conn->get_schedule();
+     this->ui->currentDelay->setText("Current delay: ");
+     int delay = conn->get_delay();
+     this->ui->delayValue->setText(QString::number(delay));
+     this->ui->nextStop->setText("Next stop: ");
+     int index = conn->find_schedule_index(transit->get_time() - delay);
+     this->ui->nextStopName->setText(QString(schedule.at(index + 1).first->name().c_str()));
+     this->ui->lineNumber->setText("Line number: ");
+     int line_number = conn->get_line()->get_line_number();
+     this->ui->lineNumberValue->setText(QString::number(line_number));
+
+     int sch_size = schedule.size() - 1;
+     int line_cord = -60 * sch_size;
+     auto line = itineraryScene->addLine(0, 0, 0, line_cord);
+     line->setPen(QPen(Qt::gray, 10, Qt::SolidLine, Qt::RoundCap));
+     for (int i = 0; i < sch_size + 1; i++){
+     auto text = itineraryScene->addText(QString(schedule.at(i).first->name().c_str()));
+     text->setPos(20, -15 - 60 * i);
+     text->setFont(QFont("Arial" , 10));
+         if (i > index){
+            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
+            stop->setPen(QPen({Qt::black}, 2));
+         }
+         else {
+            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            stop->setBrush(QBrush(QColor{Qt::green}, Qt::SolidPattern));
+            stop->setPen(QPen({Qt::black}, 2));
+         }
+     }
+}
+
+void MainWindow::clear_itinerary()
+{
+    this->ui->currentDelay->clear();
+    this->ui->nextStop->clear();
+    this->ui->lineNumber->clear();
+    this->ui->delayValue->clear();
+    this->ui->lineNumberValue->clear();
+    this->ui->nextStopName->clear();
+    qDeleteAll(itineraryScene->items());
+}
+
+void MainWindow::display_street_name()
+{
+        std::string path = QFileInfo("../../examples/streetList.csv").absoluteFilePath().toStdString();
+        // Let the PublicTransport module load the map
+        transit->load_map(path.c_str());
+
+        if (this->ui->showStreetNames->isChecked()){
+        // And add them to the scene...
+            for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
+                // LABELS
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
+                text->setFont(QFont("Arial" , 9));
+                text->setDefaultTextColor(Qt::red);
+                text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
+                            ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
+             }
+        }
+        else {
+            // remove them from the scene//TODO
+            for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
+                // LABELS
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
+                text->setDefaultTextColor(Qt::white);
+                text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
+                             ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
+            }
+         }
+}
+
+void MainWindow::display_stop_name()
+{
+        std::string path = QFileInfo("../../examples/stopList.csv").absoluteFilePath().toStdString();
+        /* Let the PublicTransport module load the stops */
+        transit->load_stops(path.c_str());
+        if (this->ui->showStopNames->isChecked()){
+            for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
+                text->setDefaultTextColor(Qt::blue);
+                text->setFont(QFont("Arial" , 9));
+                text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
+            }
+        }
+        else {
+            // remove them from the scene//TODO
+            for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
+                text->setDefaultTextColor(Qt::white);
+                text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
+            }
+        }
 }
 
 void MainWindow::initTraffic()
@@ -246,8 +348,10 @@ void MainWindow::initScene()
 {
     this->scene = new Scene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
-
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
+    this->itineraryScene = new Scene(ui->itineraryView);
+    ui->itineraryView->setScene(itineraryScene);
+    ui->itineraryView->setRenderHints(QPainter::Antialiasing);
 
     /*
     auto line = scene->addLine(200, 200 , 20, 2);

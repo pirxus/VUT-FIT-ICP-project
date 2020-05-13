@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1209</width>
-    <height>672</height>
+    <width>1001</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -190,14 +190,81 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>220</height>
-          </size>
+        <widget class="QCheckBox" name="showStreetNames">
+         <property name="text">
+          <string>Display street names</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="showStopNames">
+         <property name="text">
+          <string>Display stop names</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QLabel" name="nextStop">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="currentDelay">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lineNumber">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLabel" name="nextStopName">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::AutoText</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="delayValue">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lineNumberValue">
+             <property name="inputMethodHints">
+              <set>Qt::ImhNone</set>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="itineraryView"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -289,8 +356,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1209</width>
-     <height>24</height>
+     <width>1001</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

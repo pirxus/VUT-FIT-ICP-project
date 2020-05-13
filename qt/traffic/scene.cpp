@@ -26,6 +26,8 @@ void Scene::add_connection(Connection *conn)
     connect(new_conn, &ViewConnection::display_route, this, &Scene::display_route);
     connect(new_conn, &ViewConnection::clear_route, this, &Scene::clear_route);
     this->addItem(new_conn);
+    connect(new_conn, &ViewConnection::display_itinerary, this, &Scene::display_itinerary);
+    connect(new_conn, &ViewConnection::clear_itinerary, this, &Scene::clear_itinerary);
 }
 
 void Scene::add_street(Street *street)
@@ -165,4 +167,12 @@ void Scene::end_detour_selection(bool correct)
     canceled_street = nullptr;
     detour.clear();
 
+void Scene::itinerary_displayed_slot(Connection *conn)
+{
+    emit(display_itinerary(conn));
+}
+
+void Scene::itinerary_cleared_slot()
+{
+    emit(clear_itinerary());
 }

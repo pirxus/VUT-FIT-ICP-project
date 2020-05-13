@@ -1,4 +1,10 @@
-﻿#ifndef WAYPOINT_H
+﻿/**
+ * @file Waypoint.h
+ * @brief
+ * @author
+ */
+
+#ifndef WAYPOINT_H
 #define WAYPOINT_H
 
 #include <vector>
@@ -38,9 +44,8 @@ public:
 
     /**
      * @brief Computes the distance between two waypoints
-     * @param points
-     * @param start
-     * @param end
+     * @param first Waypoint
+     * @param second Waypoint
      * @return Eucleidean distance between the two waypoints
      */
     static double distance(Waypoint first, Waypoint second);
