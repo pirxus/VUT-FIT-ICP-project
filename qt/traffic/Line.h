@@ -45,12 +45,40 @@ public:
      */
     void compute_route();
 
-
+    /**
+     * @brief add_stops Add a new stop to the
+     * @param stop Stop object
+     */
     void add_stop(Stop *stop);
+
+    /**
+     * @brief add_connection Add new connection to the
+     * @param conn Connection object
+     */
     void add_connection(Connection *conn);
+
+    /**
+     * @brief set_color Sets color the the line
+     * @param color QColor color
+     */
     void set_color(QColor color);
+
+    /**
+     * @brief get_line_number Sets color the the line
+     * @return m_number Number of this line
+     */
     unsigned get_line_number() { return this->m_number; }
+
+    /**
+     * @brief get_color Gets color the line
+     * @return m_color Color of this line
+     */
     QColor get_color() { return this->m_color; }
+
+    /**
+     * @brief get_route Gets r the line
+     * @return m_route Vector of route Waypoints
+     */
     std::vector<Waypoint> get_route() { return this->m_route; }
 };
 

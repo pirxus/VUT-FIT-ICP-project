@@ -1,4 +1,10 @@
-﻿#ifndef SCENE_H
+﻿/**
+ * @file scene.h
+ * @brief
+ * @author
+ */
+
+#ifndef SCENE_H
 #define SCENE_H
 
 #include <QGraphicsScene>

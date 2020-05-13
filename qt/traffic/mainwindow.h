@@ -1,4 +1,10 @@
-﻿#ifndef MAINWINDOW_H
+﻿/**
+ * @file mainwindow.h
+ * @brief
+ * @author
+ */
+
+#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -40,7 +46,7 @@ private slots:
 
 private:
     void initTraffic(); /**< Creates a public transport object */
-    void initScene();
+    void initScene(); /** Initialize scenes */
     PublicTransport *transit; /**< The controller of the program logic */
     Ui::MainWindow *ui;
     Scene *scene;

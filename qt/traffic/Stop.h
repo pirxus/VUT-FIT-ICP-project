@@ -28,6 +28,9 @@ public:
  	*/
     Stop(Street *street, std::string name, float pos);
 
+    /**
+    * @brief name returns name of the stop
+    */
     std::string name() {return m_name;}
 };
 

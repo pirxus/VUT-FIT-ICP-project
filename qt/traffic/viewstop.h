@@ -1,4 +1,10 @@
-﻿#ifndef VIEWSTOP_H
+﻿/**
+ * @file viewstop.h
+ * @brief
+ * @author
+ */
+
+#ifndef VIEWSTOP_H
 #define VIEWSTOP_H
 
 #include <QGraphicsItem>

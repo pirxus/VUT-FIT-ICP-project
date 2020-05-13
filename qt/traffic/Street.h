@@ -40,7 +40,17 @@ public:
 
     bool lies_on_street(QPoint point);
 
+    /**
+    * @brief get_traffic Gets the traffic situation.
+    * @return m_traffic Current traffic situation the this street.
+    */
     int get_traffic() { return this->m_traffic; }
+
+    /**
+    * @brief set_traffic Sets the traffic situation.
+    * @return m_traffic Current traffic situation the this street.
+    * @param traffic
+    */
     void set_traffic(int traffic) { this->m_traffic = traffic; }
 };
 

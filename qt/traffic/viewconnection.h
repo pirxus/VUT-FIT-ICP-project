@@ -1,4 +1,10 @@
-﻿#ifndef VIEWCONNECTION_H
+﻿/**
+ * @file viewconnection.h
+ * @brief
+ * @author
+ */
+
+#ifndef VIEWCONNECTION_H
 #define VIEWCONNECTION_H
 
 #include <QGraphicsItem>
@@ -30,10 +36,26 @@ protected:
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 signals:
+    /**
+     * @brief display_route Signal emitted when one connection is selected
+     * @param line Line object
+     */
     void display_route(Line *line);
+
+    /**
+     * @brief clear_route Signal emitted when connection is unselected
+     */
     void clear_route();
 
+    /**
+     * @brief display_itinerary Signal emitted when one connection is selected
+     * @param conn Connection object
+     */
     void display_itinerary(Connection *conn);
+
+    /**
+     * @brief clear_itinerary Signal emitted when one connection is unselected
+     */
     void clear_itinerary();
 };
 
