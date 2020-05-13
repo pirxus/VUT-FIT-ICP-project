@@ -86,6 +86,14 @@ public:
     int get_delay() { return this->m_delay; }
     QPointF get_pos() { return this->m_position; }
     Line *get_line() { return this->m_line; }
+
+
+    /**
+     * @brief delete_from_schedule Deletes all schedule entries for stops that lie on the
+     * specified street
+     * @param street
+     */
+    void delete_from_schedule(Street *street);
 };
 
 #endif

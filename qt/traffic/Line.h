@@ -19,6 +19,7 @@
 #include "Street.h"
 #include "Stop.h"
 #include "Waypoint.h"
+#include "Connection.h"
 
 /* Forward declarations.. */
 class Connection;

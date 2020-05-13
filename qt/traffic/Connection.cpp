@@ -31,9 +31,21 @@ void Connection::set_schedule(std::vector<Stop *> stops, std::vector<unsigned> t
     }
 }
 
+void Connection::delete_from_schedule(Street *street)
+{
+    std::vector<std::pair<Stop *, unsigned>> new_sch;
+    for (auto it = m_schedule.begin(); it != m_schedule.end(); it++) {
+        if (it->first->street != street) {
+            new_sch.push_back(*it);
+        }
+    }
+
+    m_schedule = new_sch;
+}
+
 void Connection::update_position(unsigned time) {
     /* First check whether the current time is within the duty window */
-    if (time < this->m_schedule.front().second || time - m_delay > this->m_schedule.back().second) {
+    if (time < this->m_schedule.front().second || time - m_delay >= this->m_schedule.back().second) {
         this->active = false;
         this->m_delay = 0;
         this->m_route_index = 0;
