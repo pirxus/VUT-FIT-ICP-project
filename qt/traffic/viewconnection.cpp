@@ -42,7 +42,7 @@ void ViewConnection::focusInEvent(QFocusEvent *event)
     this->setPos(this->m_conn->get_pos().x() - m_size/2.0, this->m_conn->get_pos().y() - m_size/2.0);
     QGraphicsEllipseItem::focusInEvent(event);
 
-    /* Notify the scene to display the line route */
+    /* Notify the scene to display the line route and itinerary*/
     emit(this->display_route(this->m_conn->get_line()));
     emit(this->display_itinerary(this->m_conn));
 }
@@ -61,7 +61,7 @@ void ViewConnection::focusOutEvent(QFocusEvent *event)
     this->setPos(this->m_conn->get_pos().x() - m_size/2.0, this->m_conn->get_pos().y() - m_size/2.0);
     QGraphicsEllipseItem::focusOutEvent(event);
 
-    /* Notify the scene to clear the displayed route */
+    /* Notify the scene to clear the displayed route and itinerary */
     emit(this->clear_route());
     emit(this->clear_itinerary());
 }

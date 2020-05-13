@@ -39,6 +39,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(scene, &Scene::display_itinerary, this, &MainWindow::display_itinerary);
     connect(scene, &Scene::clear_itinerary, this, &MainWindow::clear_itinerary);
+
+    connect(ui->showStreetNames, &QCheckBox::stateChanged, this, &MainWindow::display_street_name);
+    connect(ui->showStopNames, &QCheckBox::stateChanged, this, &MainWindow::display_stop_name);
 }
 
 MainWindow::~MainWindow()
@@ -102,7 +105,6 @@ void MainWindow::load_stops()
          it != transit->map.stops.end(); it++) {
         this->scene->add_stop((*it).second);
         /*
-        //LABELS
         auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
         text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
         */
@@ -214,6 +216,58 @@ void MainWindow::clear_itinerary()
     this->ui->lineNumberValue->clear();
     this->ui->nextStopName->clear();
     qDeleteAll(itineraryScene->items());
+}
+
+void MainWindow::display_street_name()
+{
+        std::string path = QFileInfo("../../examples/streetList.csv").absoluteFilePath().toStdString();
+        // Let the PublicTransport module load the map
+        transit->load_map(path.c_str());
+
+        if (this->ui->showStreetNames->isChecked()){
+        // And add them to the scene...
+            for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
+                // LABELS
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
+                text->setFont(QFont("Arial" , 9));
+                text->setDefaultTextColor(Qt::red);
+                text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
+                            ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
+             }
+        }
+        else {
+            // remove them from the scene//TODO
+            for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
+                // LABELS
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
+                text->setDefaultTextColor(Qt::white);
+                text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
+                             ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
+            }
+         }
+}
+
+void MainWindow::display_stop_name()
+{
+        std::string path = QFileInfo("../../examples/stopList.csv").absoluteFilePath().toStdString();
+        /* Let the PublicTransport module load the stops */
+        transit->load_stops(path.c_str());
+        if (this->ui->showStopNames->isChecked()){
+            for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
+                text->setDefaultTextColor(Qt::blue);
+                text->setFont(QFont("Arial" , 9));
+                text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
+            }
+        }
+        else {
+            // remove them from the scene//TODO
+            for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
+                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
+                text->setDefaultTextColor(Qt::white);
+                text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
+            }
+        }
 }
 
 void MainWindow::initTraffic()

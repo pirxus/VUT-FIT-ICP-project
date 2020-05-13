@@ -44,6 +44,11 @@ private slots:
     void display_itinerary(Connection *conn);
     void clear_itinerary();
 
+    void display_street_name();
+    void display_stop_name();
+    //void display_street_name(Street *streets);
+    //void display_stop_name(Stop *stops);
+
 private:
     void initTraffic(); /**< Creates a public transport object */
     void initScene(); /** Initialize scenes */

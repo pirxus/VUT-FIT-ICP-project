@@ -123,6 +123,20 @@
         </layout>
        </item>
        <item>
+        <widget class="QCheckBox" name="showStreetNames">
+         <property name="text">
+          <string>Display street names</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="showStopNames">
+         <property name="text">
+          <string>Display stop names</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
