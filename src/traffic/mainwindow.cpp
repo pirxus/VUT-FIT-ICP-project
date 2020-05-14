@@ -274,7 +274,7 @@ void MainWindow::display_itinerary(Connection *conn)
      line->setPen(QPen(Qt::gray, 10, Qt::SolidLine, Qt::RoundCap));
      for (int i = 0; i < sch_size + 1; i++) {
          auto text = itineraryScene->addText(QString(std::get<0>(schedule.at(i))->name().c_str()));
-         text->setPos(20, -15 - 60 * i);
+         text->setPos(20, -15 + 60 * i);
          text->setFont(QFont("Arial" , 10));
          //auto time = itineraryScene->addText(QTime::(schedule.at(i).second).toString("hh:mm"));
          auto time = itineraryScene->addText(QString::number(std::get<1>(schedule.at(i))));
@@ -283,7 +283,7 @@ void MainWindow::display_itinerary(Connection *conn)
 
 
          if (i > sch_index){
-            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            auto stop = itineraryScene->addEllipse(-10, -10 + 60 * i, 20, 20);
             stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
             stop->setPen(QPen({Qt::black}, 2));
          }

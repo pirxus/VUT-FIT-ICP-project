@@ -19,7 +19,7 @@ private:
     Stop *m_stop;
 
 public:
-    explicit ViewStop(Stop *stop, qreal width = 10, qreal height = 10, QGraphicsItem *parent = nullptr);
+    explicit ViewStop(Stop *stop, qreal width = 12, qreal height = 12, QGraphicsItem *parent = nullptr);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

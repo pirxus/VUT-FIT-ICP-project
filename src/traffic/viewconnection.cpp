@@ -3,9 +3,9 @@
 ViewConnection::ViewConnection(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent) :
     QObject(), QGraphicsEllipseItem(x, y, width, height, parent)
 {
-    this->m_size = 8;
+    this->m_size = 15;
     this->setVisible(false);
-    this->setPen(QPen({Qt::black}, 1));
+    this->setPen(QPen({Qt::black}, 2));
     this->setAcceptHoverEvents(true);
     this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
@@ -49,7 +49,7 @@ void ViewConnection::focusInEvent(QFocusEvent *event)
 
 void ViewConnection::focusOutEvent(QFocusEvent *event)
 {
-    this->m_size = 18;
+    this->m_size = 15;
     QRectF rect =  this->rect();
 
     /* resize back */
@@ -74,6 +74,6 @@ void ViewConnection::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 
 void ViewConnection::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this->setPen(QPen({Qt::black}, 1));
+    this->setPen(QPen({Qt::black}, 2));
     QGraphicsEllipseItem::hoverLeaveEvent(event);
 }

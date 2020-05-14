@@ -24,7 +24,7 @@ private:
     int m_size;
 
 public:
-    explicit ViewConnection(qreal x = 0, qreal y = 0, qreal width = 8, qreal height = 8, QGraphicsItem *parent = nullptr);
+    explicit ViewConnection(qreal x = 0, qreal y = 0, qreal width = 15, qreal height = 15, QGraphicsItem *parent = nullptr);
     void set_connection(Connection *conn);
     void redraw();
 

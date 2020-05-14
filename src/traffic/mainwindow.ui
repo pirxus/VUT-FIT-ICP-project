@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1059</width>
-    <height>641</height>
+    <height>649</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -280,6 +280,15 @@
            <height>250</height>
           </size>
          </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -373,7 +382,7 @@
      <x>0</x>
      <y>0</y>
      <width>1059</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
