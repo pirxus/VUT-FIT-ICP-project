@@ -11,7 +11,10 @@ test: $(HEAD) $(SRC)
 .PHONY: clean
 
 doxygen:
-	$(MAKE) -C src
+	doxygen ./src/icp/Doxyfile
 
+run:
+	cd src/icp; qmake -project; qmake -gui -widgets; \
+	make ; ./icp
 clean:
 	rm -rf doc/*
