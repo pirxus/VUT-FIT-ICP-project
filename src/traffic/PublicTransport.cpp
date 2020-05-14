@@ -186,6 +186,11 @@ void PublicTransport::load_lines(const char *filename)
     }
 }
 
+void PublicTransport::set_clock_rate(unsigned clock_rate)
+{
+    m_timer->setInterval(DEFAULT_TIMEOUT/clock_rate);
+}
+
 void PublicTransport::delete_lines()
 {
     for (auto line : this->lines) {

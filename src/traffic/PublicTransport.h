@@ -19,7 +19,7 @@
 #define TIME_INCREMENT 2
 #define DEFAULT_TIME 12*3600
 #define DEFAULT_TIMEOUT 1000
-#define DEFAULT_CLOCK_RATE 10.0f
+#define DEFAULT_CLOCK_RATE 1
 
 
 class PublicTransport : public QObject {
@@ -94,6 +94,8 @@ public:
     unsigned get_time() { return this->m_time; }
     void set_time(unsigned time) { this->m_time = time; } //TODO
     void set_timeout(unsigned timeout); /**< Sets the clock speed */ //TODO
+    unsigned get_clock_rate() { return DEFAULT_CLOCK_RATE; }
+    void set_clock_rate(unsigned clock_rate);
 
     void delete_lines();
 

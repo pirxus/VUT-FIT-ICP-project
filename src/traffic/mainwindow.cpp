@@ -153,7 +153,8 @@ void MainWindow::update_time(unsigned time)
 
 void MainWindow::slider_speed()
 {
-
+    unsigned slider_value = this->ui->sliderSpeed->value();
+    this->transit->set_clock_rate(slider_value);
 }
 
 void MainWindow::toggle_play_pause()
