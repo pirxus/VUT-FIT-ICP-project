@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->zoomSlider, &QSlider::valueChanged, this, &MainWindow::sliderZoom);
 
     connect(ui->buttonPause, &QPushButton::clicked, this, &MainWindow::toggle_play_pause);
+    connect(ui->sliderSpeed, &QSlider::valueChanged, this, &MainWindow::slider_speed);
 
     /* Setup top menu actions */
     connect(ui->actionLoad_map, &QAction::triggered, this, &MainWindow::load_map);
@@ -151,6 +152,11 @@ void MainWindow::update_time(unsigned time)
     this->ui->timeEdit->setTime(QTime(0, 0).addSecs(time));
 }
 
+void MainWindow::slider_speed()
+{
+
+}
+
 void MainWindow::toggle_play_pause()
 {
     if (this->ui->buttonPause->text() == "Pause") {
@@ -269,8 +275,9 @@ void MainWindow::display_itinerary(Connection *conn)
          text->setPos(20, -15 + 60 * i);
          text->setFont(QFont("Arial" , 10));
          //auto time = itineraryScene->addText(QTime::(schedule.at(i).second).toString("hh:mm"));
-         //time->setPos(-60, -15 + 60 * i);
-         //time->setFont(QFont("Arial" , 10));
+         auto time = itineraryScene->addText(QString::number(schedule.at(i).second));
+         time->setPos(-60, -15 + 60 * i);
+         time->setFont(QFont("Arial" , 10));
 
 
          if (i > index){

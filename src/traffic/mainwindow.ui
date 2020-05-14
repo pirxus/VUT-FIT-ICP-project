@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1059</width>
-    <height>640</height>
+    <height>641</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -138,6 +138,15 @@
           <widget class="QSlider" name="sliderSpeed">
            <property name="toolTip">
             <string>Clock speed</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>200</number>
+           </property>
+           <property name="value">
+            <number>1</number>
            </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>

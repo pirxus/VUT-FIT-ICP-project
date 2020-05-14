@@ -34,6 +34,7 @@ private slots:
     void load_lines();
     void positions_updated();
     void update_time(unsigned time); /**< Sets the time on the clock */
+    void slider_speed(); /**< Time speed slider handler */
     void toggle_play_pause(); /**< Play/Pause event handler */
 
     void street_selected(Street *street);
