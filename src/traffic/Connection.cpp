@@ -27,15 +27,24 @@ void Connection::set_schedule(std::vector<Stop *> stops, std::vector<unsigned> t
     auto stop = stops.begin();
     auto time = times.begin();
     for (; stop != stops.end() && time != times.end(); stop++, time++) {
-        m_schedule.push_back(std::pair<Stop *, unsigned>(*stop, *time));
+        m_schedule.push_back(std::tuple<Stop *, unsigned, unsigned>(*stop, *time, 0));
     }
+}
+
+int Connection::get_delay(unsigned sch_index)
+{
+    unsigned stop_delay = 0;
+    if (sch_index < m_schedule.size() - 1) {
+        stop_delay = std::get<2>(m_schedule.at(sch_index + 1));
+    }
+    return m_delay + stop_delay;
 }
 
 void Connection::delete_from_schedule(Street *street)
 {
-    std::vector<std::pair<Stop *, unsigned>> new_sch;
+    std::vector<std::tuple<Stop *, unsigned, unsigned>> new_sch;
     for (auto it = m_schedule.begin(); it != m_schedule.end(); it++) {
-        if (it->first->street != street) {
+        if (std::get<0>(*it)->street != street) {
             new_sch.push_back(*it);
         }
     }
@@ -43,9 +52,25 @@ void Connection::delete_from_schedule(Street *street)
     m_schedule = new_sch;
 }
 
+void Connection::add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences)
+{
+    for (unsigned i = 0; i < stops.size(); i++) {
+        for (unsigned j = 0; j < m_schedule.size(); j++) {
+            if (std::get<0>(m_schedule.at(j)) == stops.at(i))
+                occurences.at(i)--;
+
+            if (occurences.at(i) == 0) {
+                std::get<2>(m_schedule.at(j)) += DETOUR_DELAY;
+                //std::cerr<< std::get<2>(m_schedule.back())<<"\n";
+            }
+        }
+    }
+}
+
 void Connection::update_position(unsigned time) {
     /* First check whether the current time is within the duty window */
-    if (time < this->m_schedule.front().second || time - m_delay >= this->m_schedule.back().second) {
+    if (time < std::get<1>(this->m_schedule.front())
+            || (time - m_delay >= std::get<1>(this->m_schedule.back()) + std::get<2>(this->m_schedule.back()))) {
         this->active = false;
         this->m_delay = 0;
         this->m_route_index = 0;
@@ -56,21 +81,21 @@ void Connection::update_position(unsigned time) {
         unsigned sch_index = this->find_schedule_index(time);
 
         /* Check whether the vehicle should be right at the stop */
-        if (this->m_schedule.at(sch_index).second == time - this->m_delay) {
-            this->m_position = this->m_schedule.at(sch_index).first->pos; //TODO delay???
+        if (std::get<1>(this->m_schedule.at(sch_index)) + std::get<2>(this->m_schedule.at(sch_index)) == time - this->m_delay) {
+            this->m_position = std::get<0>(this->m_schedule.at(sch_index))->pos;
 
         } else { /* Otherwise compute the position */
             /* Find the stops in the m_route vector */
-            unsigned s1 = Waypoint::find_stop(this->m_route, this->m_schedule.at(sch_index).first);
-            unsigned s2 = Waypoint::find_stop(this->m_route, this->m_schedule.at(sch_index + 1).first);
+            unsigned s1 = Waypoint::find_stop(this->m_route, std::get<0>(this->m_schedule.at(sch_index)));
+            unsigned s2 = Waypoint::find_stop(this->m_route, std::get<0>(this->m_schedule.at(sch_index + 1)));
 
             /* Compute the current segment total length */
             double segment_len = Waypoint::segment_len(this->m_route, s1, s2);
 
-            /* Compute the 'time' length of this segment */
-            unsigned time_dist = this->m_schedule.at(sch_index + 1).second -
-                    this->m_schedule.at(sch_index).second;
-            unsigned time_pos = time - this->m_schedule.at(sch_index).second; /* normalize current time */
+            /* Compute the 'time' length of this segment including the delay differences */
+            unsigned time_dist = (std::get<1>(this->m_schedule.at(sch_index + 1)) + std::get<2>(this->m_schedule.at(sch_index + 1))) -
+                    (std::get<1>(this->m_schedule.at(sch_index)) + std::get<2>(this->m_schedule.at(sch_index)));
+            unsigned time_pos = time - (std::get<1>(this->m_schedule.at(sch_index)) + std::get<2>(this->m_schedule.at(sch_index)));
 
             /* Compute the time progress between the stops */
             double progress = ((double)time_pos - m_delay) / ((double)time_dist);
@@ -110,13 +135,12 @@ void Connection::update_position(unsigned time) {
 
 unsigned Connection::find_schedule_index(unsigned time)
 {
-    auto sch = this->m_schedule;
-    unsigned len = sch.size();
+    unsigned len = this->m_schedule.size();
     for (unsigned i = 0; i < len; i++) {
-        if (sch.at(i).second <= time - this->m_delay) {
+        if (std::get<1>(this->m_schedule.at(i)) + std::get<2>(this->m_schedule.at(i)) <= time - this->m_delay) {
             continue;
         } else { /* We have already passed the desired stop */
-            return i - 1; /* in this state, it will always be at least 1 */
+            return i - 1; /* in this state, i will always be at least 1 */
         }
     }
 

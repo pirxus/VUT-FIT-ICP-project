@@ -101,6 +101,7 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
     }
     /* Tie up the detour insertion */
     m_streets_current.insert(m_streets_current.end(), m_streets.begin() + last, m_streets.end());
+    m_streets = m_streets_current;
 
     /* Edit the m_stops vector - delete all the stops that lie on the closed street */
     for (auto *iter : m_stops) {
@@ -108,23 +109,25 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
         m_stops_current.push_back(iter);
     }
 
-    /* If the ending or begining stop lies on the closed street, trim the total route */
+    /* If the ending or begining stop lies on the closed street, trim the total route to the last relevant stop */
     if (m_route.front().stop->street == closed) {
         for (unsigned i = 0; i < m_route.size(); i++) {
-            if (m_route.at(i).street != nullptr) {
-                m_route = std::vector<Waypoint>(m_route.begin() + i + 1, m_route.end());
-                break;
+            if (m_route.at(i).stop != nullptr) {
+                if (m_route.at(i).stop->street != closed) {
+                    m_route = std::vector<Waypoint>(m_route.begin() + i, m_route.end());
+                    break;
+                }
             }
         }
     }
 
     if (m_route.back().stop->street == closed) {
         for (int i = m_route.size() - 1; i >= 0; i--) {
-            if (m_route.at(i).street != nullptr) {
-                std::cerr<<m_route.size()<<std::endl;
-                m_route = std::vector<Waypoint>(m_route.begin(), m_route.begin() + i);
-                std::cerr<<m_route.size()<<std::endl;
-                break;
+            if (m_route.at(i).stop != nullptr) {
+                if (m_route.at(i).stop->street != closed) {
+                    m_route = std::vector<Waypoint>(m_route.begin(), m_route.begin() + i + 1);
+                    break;
+                }
             }
         }
     }
@@ -251,6 +254,7 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
         i1 = i2 = -1;
     }
 
+    m_route_current.clear();
     /* Create a reversed copy of new_route */
     std::vector<Waypoint> new_route_reversed(new_route);
     std::reverse(new_route_reversed.begin(), new_route_reversed.end());
@@ -272,36 +276,60 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
     /* Tie up the vector */
     m_route_current.insert(m_route_current.end(), m_route.begin() + last_original, m_route.end());
 
+    /* Add delay on the stops that come after the detour */
+    std::vector<Stop *> affected_stops;
+    std::vector<unsigned> occurences;
+    for (unsigned i = 0; i < index_tuples.size(); i++) {
 
-   // for (auto point : m_route) {
-   //     std::cerr<<point.pos.x()<<" "<<point.pos.y()<<" ";
-   //     if (point.stop == nullptr) {
-   //         std::cerr<<"street: "<<point.street->name<<std::endl;
-   //     } else {
-   //         std::cerr<<"stop: "<<point.stop->name()<<std::endl;
-   //     }
-   // }
+        /* First find the first stop after the detour */
+        for (unsigned j = std::get<1>(index_tuples.at(i)) + 1; j < m_route.size(); j++) {
+            if (m_route.at(j).stop != nullptr && m_route.at(j).stop->street != closed) {
+                Stop *first = m_route.at(j).stop;
+                unsigned occurence = 1;
 
-   // std::cerr << std::endl;
+                /* Now we've got the stop, check, how many times is it present in the m_route vector before this one */
+                for (unsigned k = 0; k < j; k++) {
+                    if (m_route.at(k).stop == first) occurence++;
+                }
 
-   // for (auto point : m_route_current) {
-   //     std::cerr<<point.pos.x()<<" "<<point.pos.y()<<" ";
-   //     if (point.stop == nullptr) {
-   //         std::cerr<<"street: "<<point.street->name<<std::endl;
-   //     } else {
-   //         std::cerr<<"stop: "<<point.stop->name()<<std::endl;
-   //     }
-   // }
+                /* Save the stop and the occurence */
+                affected_stops.push_back(first);
+                occurences.push_back(occurence);
+                break;
+            }
+        }
+    }
+
+    for (auto point : m_route) {
+        std::cerr<<point.pos.x()<<" "<<point.pos.y()<<" ";
+        if (point.stop == nullptr) {
+            std::cerr<<"street: "<<point.street->name<<std::endl;
+        } else {
+            std::cerr<<"stop: "<<point.stop->name()<<std::endl;
+        }
+    }
+
+    std::cerr << std::endl;
+
+    for (auto point : m_route_current) {
+        std::cerr<<point.pos.x()<<" "<<point.pos.y()<<" ";
+        if (point.stop == nullptr) {
+            std::cerr<<"street: "<<point.street->name<<std::endl;
+        } else {
+            std::cerr<<"stop: "<<point.stop->name()<<std::endl;
+        }
+    }
 
     m_route = m_route_current;
     /* Set the new route for the connections */
     for (auto *conn : this->connections) {
         /* First delete the schedule entries that contain the affected stops*/
         conn->delete_from_schedule(closed);
+        /* Propagate the delay caused by the detour */
+        conn->add_delay_on_stops(affected_stops, occurences);
         /* Update the waypoints */
         conn->update_route();
     }
-
 }
 
 void Line::set_color(QColor color) {

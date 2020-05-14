@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -17,6 +18,8 @@
 #include <QTime>
 #include "Street.h"
 #include "Waypoint.h"
+
+#define DETOUR_DELAY 240 /**< Base detour delay increment */
 
 /* Forward declarations.. */
 class Stop;
@@ -27,8 +30,8 @@ class Connection {
     Line *m_line; /**< The parent line of the connection */
 
     /**
-     * @brief Stop - time pairs defining the base schedule for this connection */
-    std::vector<std::pair<Stop *, unsigned>> m_schedule;
+     * @brief Stop - time - delay tuples defining the base schedule for this connection */
+    std::vector<std::tuple<Stop *, unsigned, unsigned>> m_schedule;
 
     /** @brief A list of waypoints for the connection - the first element is the next coordinate
      * on the route and the second and the third point to a stop/street or a nullptr */
@@ -82,7 +85,7 @@ public:
     /**
      * @brief get_schedule Returns schedule of this connection.
      */
-    std::vector<std::pair<Stop *, unsigned>> get_schedule() { return this->m_schedule; }
+    std::vector<std::tuple<Stop *, unsigned, unsigned>> get_schedule() { return this->m_schedule; }
 
     // refernece - open to alterations...
     std::vector<Waypoint> *get_route() { return &this->m_route; }
@@ -90,7 +93,7 @@ public:
     /**
      * @brief get_delay Returns current delay of this connection.
      */
-    int get_delay() { return this->m_delay; }
+    int get_delay(unsigned sch_index);
     QPointF get_pos() { return this->m_position; }
     Line *get_line() { return this->m_line; }
 
@@ -101,6 +104,9 @@ public:
      * @param street
      */
     void delete_from_schedule(Street *street);
+
+
+    void add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences);
 };
 
 #endif

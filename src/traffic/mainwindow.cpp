@@ -247,14 +247,16 @@ void MainWindow::restore_after_cancel()
 void MainWindow::display_itinerary(Connection *conn)
 {
      auto schedule = conn->get_schedule();
+     if (schedule.empty()) return; /* Avoid segfaults, nothing to display... */
      this->ui->currentDelay->setText("Current delay: ");
-     int delay = conn->get_delay();
-     this->ui->delayValue->setText(QString::number(delay));
-     this->ui->nextStop->setText("Next stop: ");
-     int index = conn->find_schedule_index(transit->get_time() - delay);
-     this->ui->nextStopName->setText(QString(schedule.at(index + 1).first->name().c_str()));
-     this->ui->lineNumber->setText("Line number: ");
+     int sch_index = conn->find_schedule_index(transit->get_time());
+     int delay = conn->get_delay(sch_index);
      int line_number = conn->get_line()->get_line_number();
+
+     this->ui->delayValue->setText(QString::number(delay/60));
+     this->ui->nextStop->setText("Next stop: ");
+     this->ui->nextStopName->setText(QString(std::get<0>(schedule.at(sch_index + 1))->name().c_str()));
+     this->ui->lineNumber->setText("Line number: ");
      this->ui->lineNumberValue->setText(QString::number(line_number));
 
      int sch_size = schedule.size() - 1;
@@ -262,11 +264,11 @@ void MainWindow::display_itinerary(Connection *conn)
      auto line = itineraryScene->addLine(0, 0, 0, line_cord);
      line->setPen(QPen(Qt::gray, 10, Qt::SolidLine, Qt::RoundCap));
      for (int i = 0; i < sch_size + 1; i++) {
-         auto text = itineraryScene->addText(QString(schedule.at(i).first->name().c_str()));
+         auto text = itineraryScene->addText(QString(std::get<0>(schedule.at(i))->name().c_str()));
          text->setPos(20, -15 - 60 * i);
          text->setFont(QFont("Arial" , 10));
 
-         if (i > index){
+         if (i > sch_index){
             auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
             stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
             stop->setPen(QPen({Qt::black}, 2));
@@ -348,15 +350,5 @@ void MainWindow::initScene()
     this->itineraryScene = new Scene(ui->itineraryView);
     ui->itineraryView->setScene(itineraryScene);
     ui->itineraryView->setRenderHints(QPainter::Antialiasing);
-
-    /*
-    auto line = scene->addLine(200, 200 , 20, 2);
-
-    line->setPen(QPen({Qt::red}, 3));
-    line->setFlag(QGraphicsItem::ItemIsMovable);
-    line->setFlag(QGraphicsItem::ItemIsSelectable);
-
-    this->scene->addEllipse(200, 200 , 200, 100);
-    */
 }
 
