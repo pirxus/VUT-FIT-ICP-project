@@ -277,7 +277,7 @@ void MainWindow::display_itinerary(Connection *conn)
          text->setPos(20, -15 - 60 * i);
          text->setFont(QFont("Arial" , 10));
          //auto time = itineraryScene->addText(QTime::(schedule.at(i).second).toString("hh:mm"));
-         auto time = itineraryScene->addText(QString::number(schedule.at(i).second));
+         auto time = itineraryScene->addText(QString::number(std::get<1>(schedule.at(i))));
          time->setPos(-60, -15 + 60 * i);
          time->setFont(QFont("Arial" , 10));
 
