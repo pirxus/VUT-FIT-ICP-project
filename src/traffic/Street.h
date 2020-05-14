@@ -40,8 +40,6 @@ public:
     */
     Street(std::string name, int x1, int y1, int x2, int y2);
 
-    bool lies_on_street(QPoint point);
-
     /**
     * @brief get_traffic Gets the traffic situation.
     * @return m_traffic Current traffic situation the this street.

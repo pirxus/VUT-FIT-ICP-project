@@ -63,7 +63,6 @@ void ViewConnection::focusOutEvent(QFocusEvent *event)
 
     /* Notify the scene to clear the displayed route and itinerary */
     emit(this->clear_route());
-    emit(this->clear_itinerary());
 }
 
 void ViewConnection::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

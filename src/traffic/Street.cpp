@@ -6,12 +6,6 @@
 
 #include "Street.h"
 
-
-bool Street::lies_on_street(QPoint point) {
-    //TODO
-    return false;
-}
-
 Street::Street(std::string name, int x1, int y1, int x2, int y2){
     this->name = name;
     this->start = QPoint(x1, y1);

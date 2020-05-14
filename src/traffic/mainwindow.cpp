@@ -81,6 +81,12 @@ void MainWindow::sliderZoom(int z)
 
 void MainWindow::load_map()
 {
+    /* First clear the scene */
+    scene->delete_streets();
+    scene->delete_labels();
+    scene->delete_stops();
+    scene->delete_connections();
+
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
@@ -94,11 +100,15 @@ void MainWindow::load_map()
         it != transit->map.streets.end(); it++) {
         this->scene->add_street((*it).second);
     }
-    ui->actionLoad_map->setEnabled(false);
 }
 
 void MainWindow::load_stops()
 {
+    /* First clear the scene */
+    scene->delete_stops();
+    scene->delete_stop_labels();
+    scene->delete_connections();
+
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
@@ -110,11 +120,11 @@ void MainWindow::load_stops()
          it != transit->map.stops.end(); it++) {
         this->scene->add_stop((*it).second);
     }
-    ui->actionLoad_stops->setEnabled(false);
 }
 
 void MainWindow::load_lines()
 {
+    scene->delete_connections();
     //QString file = QFileDialog::getOpenFileName(this, "Get Any File");
     //if (file == nullptr) return;
     //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
@@ -130,7 +140,6 @@ void MainWindow::load_lines()
             this->scene->add_connection(conn);
         }
     }
-    ui->actionLoad_lines->setEnabled(false);
 }
 
 void MainWindow::positions_updated()
@@ -142,7 +151,8 @@ void MainWindow::positions_updated()
     if (m_itinerary != nullptr) {
         Connection *tmp = m_itinerary;
         clear_itinerary();
-        display_itinerary(tmp);
+        if (tmp->active)
+            display_itinerary(tmp);
     }
 }
 
@@ -254,71 +264,75 @@ void MainWindow::restore_after_cancel()
 
 void MainWindow::display_itinerary(Connection *conn)
 {
+    clear_itinerary();
     m_itinerary = conn;
-     auto schedule = conn->get_schedule();
-     if (schedule.empty()) return; /* Avoid segfaults, nothing to display... */
-     ui->currentDelay->setText("Current delay: ");
-     int sch_index = conn->find_schedule_index(transit->get_time());
-     int delay = conn->get_delay(sch_index);
-     int line_number = conn->get_line()->get_line_number();
+    auto schedule = conn->get_schedule();
+    if (schedule.empty()) return; /* Avoid segfaults, nothing to display... */
+    ui->currentDelay->setText("Current delay: ");
+    int sch_index = conn->find_schedule_index(transit->get_time());
+    int delay = conn->get_delay(sch_index);
+    int line_number = conn->get_line()->get_line_number();
 
-     ui->delayValue->setText(QString::number(delay/60));
-     ui->nextStop->setText("Next stop: ");
-     ui->nextStopName->setText(QString(std::get<0>(schedule.at(sch_index + 1))->name().c_str()));
-     ui->lineNumber->setText("Line number: ");
-     ui->lineNumberValue->setText(QString::number(line_number));
+    ui->delayValue->setText(QString::number(delay/60));
+    ui->nextStop->setText("Next stop: ");
+    ui->nextStopName->setText(QString(std::get<0>(schedule.at(sch_index + 1))->name().c_str()));
+    ui->lineNumber->setText("Line number: ");
+    ui->lineNumberValue->setText(QString::number(line_number));
 
-     /* Add a white ellipse as padding */
-     auto padding = itineraryScene->addEllipse(0, -30, 1, 1);
-     padding->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
-     padding->setPen(QPen({Qt::white}, 0));
+    /* Add a white ellipse as padding */
+    auto padding = itineraryScene->addEllipse(0, -30, 1, 1);
+    padding->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
+    padding->setPen(QPen({Qt::white}, 0));
 
-     int sch_size = schedule.size() - 1;
-     int line_cord = 60 * sch_size;
-     auto line = itineraryScene->addLine(0, 0, 0, line_cord);
-     line->setPen(QPen(Qt::darkGray, 5, Qt::SolidLine, Qt::RoundCap));
-     for (int i = 0; i < sch_size + 1; i++) {
-         /* Show the name of the stop */
-         auto text = itineraryScene->addText(QString(std::get<0>(schedule.at(i))->name().c_str()));
-         text->setPos(20, -10 + 60 * i);
-         text->setFont(QFont("Arial" , 10));
+    int sch_size = schedule.size() - 1;
+    int line_cord = 60 * sch_size;
+    auto line = itineraryScene->addLine(0, 0, 0, line_cord);
+    line->setPen(QPen(Qt::black, 5, Qt::SolidLine, Qt::RoundCap));
 
-         unsigned stop_delay = std::get<2>(schedule.at(i));
-         /* Set the time for the stop */
-         if (delay != 0 && i > sch_index) { /* Add the information about the current delay */
-             text = itineraryScene->addText(QTime(0, 0).addSecs(std::get<1>(schedule.at(i))).toString("hh:mm"));
-             text->setPos(-60, -15 + 60 * i);
-             text->setFont(QFont("Arial" , 10));
+    /* Paint the stops */
+    for (int i = 0; i < sch_size + 1; i++) {
+        /* Show the name of the stop */
+        auto text = itineraryScene->addText(QString(std::get<0>(schedule.at(i))->name().c_str()));
+        text->setPos(20, -10 + 60 * i);
+        text->setFont(QFont("Arial" , 10));
 
-             /* Delay */
-             text = itineraryScene->addText("+" + QString::number((conn->get_delay(-1) + stop_delay)/60));
-             text->setPos(-58, -2 + 60 * i);
-             text->setFont(QFont("Arial" , 8));
+        unsigned stop_delay = std::get<2>(schedule.at(i));
+        /* Set the time for the stop */
+        if (delay != 0 && i > sch_index) { /* Add the information about the current delay */
+            text = itineraryScene->addText(QTime(0, 0).addSecs(std::get<1>(schedule.at(i))).toString("hh:mm"));
+            text->setPos(-60, -15 + 60 * i);
+            text->setFont(QFont("Arial" , 10));
 
-         } else {
-             text = itineraryScene->addText(QTime(0, 0).addSecs(std::get<1>(schedule.at(i))).toString("hh:mm"));
-             text->setPos(-60, -10 + 60 * i);
-             text->setFont(QFont("Arial" , 10));
-         }
+            /* Delay */
+            text = itineraryScene->addText("+" + QString::number((conn->get_delay(-1) + stop_delay)/60));
+            text->setPos(-58, -2 + 60 * i);
+            text->setFont(QFont("Arial" , 8));
+            text->setDefaultTextColor(Qt::red);
+
+        } else {
+            text = itineraryScene->addText(QTime(0, 0).addSecs(std::get<1>(schedule.at(i))).toString("hh:mm"));
+            text->setPos(-60, -10 + 60 * i);
+            text->setFont(QFont("Arial" , 10));
+        }
 
 
-         /* Indicate the stop with an ellipse */
-         if (i > sch_index){
-            auto stop = itineraryScene->addEllipse(-10, -10 + 60 * i, 20, 20);
+        /* Indicate the stop with an ellipse */
+        if (i > sch_index) {
+            auto stop = itineraryScene->addEllipse(-9, -9 + 60 * i, 18, 18);
             stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
             stop->setPen(QPen({Qt::black}, 2));
 
-         } else {
-            auto stop = itineraryScene->addEllipse(-10, -10 + 60 * i, 20, 20);
-            stop->setBrush(QBrush(QColor{Qt::green}, Qt::SolidPattern));
+        } else {
+            auto stop = itineraryScene->addEllipse(-9, -9 + 60 * i, 18, 18);
+            stop->setBrush(QBrush(QColor{QColor(136, 168, 182, 255)}, Qt::SolidPattern));
             stop->setPen(QPen({Qt::black}, 2));
-         }
-     }
+        }
+    }
 
-     /* Add a white ellipse as padding */
-     padding = itineraryScene->addEllipse(0, 60 * (sch_size) + 20, 1, 1);
-     padding->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
-     padding->setPen(QPen({Qt::white}, 0));
+    /* Add a white ellipse as padding */
+    padding = itineraryScene->addEllipse(0, 60 * (sch_size) + 20, 1, 1);
+    padding->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
+    padding->setPen(QPen({Qt::white}, 0));
 }
 
 void MainWindow::clear_itinerary()

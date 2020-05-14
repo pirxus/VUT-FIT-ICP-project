@@ -15,7 +15,7 @@
 static QColor line_colors[10] = {QColor("lightGreen"), QColor("magenta"), QColor("yellow"),
                       QColor("blue"), QColor("darkCyan"), QColor("darkMagenta"),
                       QColor("cyan"), QColor("darkGreen"), QColor("red"),
-                      QColor("darkRed")};
+                      QColor("orange")};
 
 /**
  * @brief strip_whitespace Strips the initial and trailing whitespaces from a string

@@ -34,8 +34,10 @@ void Connection::set_schedule(std::vector<Stop *> stops, std::vector<unsigned> t
 int Connection::get_delay(int sch_index)
 {
     unsigned stop_delay = 0;
-    if (sch_index >= 0 && sch_index < m_schedule.size() - 1) {
-        stop_delay = std::get<2>(m_schedule.at(sch_index + 1));
+    if (sch_index >= 0) {
+        if ((unsigned)sch_index < m_schedule.size() - 1) {
+            stop_delay = std::get<2>(m_schedule.at(sch_index + 1));
+        }
     }
     return m_delay + stop_delay;
 }
@@ -52,16 +54,16 @@ void Connection::delete_from_schedule(Street *street)
     m_schedule = new_sch;
 }
 
-void Connection::add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences)
+void Connection::add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences, unsigned detour_len)
 {
     for (unsigned i = 0; i < stops.size(); i++) {
         for (unsigned j = 0; j < m_schedule.size(); j++) {
             if (std::get<0>(m_schedule.at(j)) == stops.at(i))
                 occurences.at(i)--;
 
+            /* Add a delay burst on all stops that come afther this one */
             if (occurences.at(i) == 0) {
-                std::get<2>(m_schedule.at(j)) += DETOUR_DELAY;
-                //std::cerr<< std::get<2>(m_schedule.back())<<"\n";
+                std::get<2>(m_schedule.at(j)) += DETOUR_DELAY*detour_len;
             }
         }
     }
@@ -69,8 +71,11 @@ void Connection::add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsig
 
 void Connection::update_position(unsigned time) {
     /* First check whether the current time is within the duty window */
-    if (time < std::get<1>(this->m_schedule.front())
-            || (time - m_delay >= std::get<1>(this->m_schedule.back()) + std::get<2>(this->m_schedule.back()))) {
+
+    unsigned start = std::get<1>(this->m_schedule.front());
+    unsigned end = std::get<1>(this->m_schedule.back()) + std::get<2>(this->m_schedule.back());
+
+    if (time < start || time - m_delay >= end) {
         this->active = false;
         this->m_delay = 0;
         this->m_route_index = 0;

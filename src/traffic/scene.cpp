@@ -10,11 +10,10 @@ Scene::Scene(QObject *parent) : QGraphicsScene(parent)
 Scene::~Scene()
 {
     this->clear_route();
-    for (auto *i : this->m_streets) { delete i; }
-    for (auto *i : this->m_connections) { delete i; }
-    for (auto *i : this->m_stops) { delete i; }
-    for (auto *i : this->m_street_labels) { delete i; }
-    for (auto *i : this->m_stop_labels) { delete i; }
+    delete_stops();
+    delete_streets();
+    delete_connections();
+    delete_labels();
 }
 
 void Scene::add_connection(Connection *conn)
@@ -214,6 +213,18 @@ void Scene::toggle_stop_names(bool checked)
         }
     }
 }
+
+void Scene::delete_streets() { for (auto *i : m_streets) { delete i; } m_streets.clear(); }
+
+void Scene::delete_stops() { for (auto *i : m_stops) { delete i; } m_stops.clear(); }
+
+void Scene::delete_connections() { for (auto *i : m_connections) { delete i; } m_connections.clear(); }
+
+void Scene::delete_street_labels() { for (auto *i : m_street_labels) { delete i; } m_street_labels.clear(); }
+
+void Scene::delete_stop_labels() { for (auto *i : m_stop_labels) { delete i; } m_stop_labels.clear(); }
+
+void Scene::delete_labels() { delete_stop_labels(); delete_street_labels(); }
 
 void Scene::itinerary_displayed_slot(Connection *conn)
 {

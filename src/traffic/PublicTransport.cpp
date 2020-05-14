@@ -21,42 +21,44 @@ PublicTransport::PublicTransport(QObject *parent) : QObject(parent)
    m_timer->setInterval(DEFAULT_TIMEOUT / m_clock_rate);
 
    /* Connect the timer timeouts */
-   connect(this->m_timer, &QTimer::timeout, this, &PublicTransport::timer_triggered);
+   connect(m_timer, &QTimer::timeout, this, &PublicTransport::timer_triggered);
 }
 
 PublicTransport::~PublicTransport()
 {
-    this->delete_lines();
-    delete this->m_timer;
+    delete_lines();
+    delete m_timer;
 }
 
 void PublicTransport::timer_triggered()
 {
-    this->m_time += TIME_INCREMENT;
-    if (this->m_time >= 24*3600) { this->m_time = 0; } /* day cycles... */
-    emit(this->time_updated(this->m_time));
+    m_time += TIME_INCREMENT;
+    if (m_time >= 24*3600) { m_time = 0; } /* day cycles... */
+    emit(time_updated(m_time));
 }
 
 void PublicTransport::time_changed(const QTime &time)
 {
-    this->m_time = time.hour()*3600 + time.minute()*60 + time.second();
-    this->update_vehicles();
-    emit(this->vehicles_updated());
+    m_time = time.hour()*3600 + time.minute()*60 + time.second();
+    update_vehicles();
+    emit(vehicles_updated());
 }
 
 void PublicTransport::load_map(const char *filename)
 {
-    this->map.load_streets(filename);
+    delete_lines();
+    map.load_streets(filename);
 }
 
 void PublicTransport::load_stops(const char *filename)
 {
-    this->map.load_stops(filename);
+    delete_lines();
+    map.load_stops(filename);
 }
 
 void PublicTransport::load_lines(const char *filename)
 {
-    //delete_lines(); // First clear the line vector
+    delete_lines(); // First clear the line vector
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
         std::cerr << "Error: could not open csv line file\n";
@@ -70,7 +72,7 @@ void PublicTransport::load_lines(const char *filename)
         /* First, load the line number */
         if (row_len != 1) {
             std::cerr << "Error: invalid line csv - line number has to be specified first\n";
-            this->delete_lines();
+            delete_lines();
             return;
         }
 
@@ -81,12 +83,12 @@ void PublicTransport::load_lines(const char *filename)
 
         } catch (std::invalid_argument const &e) {
             std::cerr << "Error: A line number has to be an integer\n";
-            this->delete_lines();
+            delete_lines();
             return;
 
         } catch (std::out_of_range const &e) {
             std::cerr << "Error: Line number out of integer range\n";
-            this->delete_lines();
+            delete_lines();
             return;
         }
 
@@ -97,7 +99,7 @@ void PublicTransport::load_lines(const char *filename)
 
         if (row_len == 1) {
             std::cerr << "Error: invalid line csv file format - a line has to have at least one street\n";
-            this->delete_lines();
+            delete_lines();
             return;
         }
 
@@ -110,10 +112,10 @@ void PublicTransport::load_lines(const char *filename)
             name = strip_whitespace(name);
 
             /* Look for the street object */
-            auto find = this->map.streets.find(name);
-            if (find == this->map.streets.end()) {
+            auto find = map.streets.find(name);
+            if (find == map.streets.end()) {
                 std::cerr << "Error: The street "<<name<<" doesn't exist\n";
-                this->delete_lines();
+                delete_lines();
                 return;
             }
 
@@ -135,10 +137,10 @@ void PublicTransport::load_lines(const char *filename)
             name = strip_whitespace(name);
 
             /* Look for the stop object */
-            auto find = this->map.stops.find(name);
-            if (find == this->map.stops.end()) {
+            auto find = map.stops.find(name);
+            if (find == map.stops.end()) {
                 std::cerr << "Error: The stop "<<name<<" doesn't exist\n";
-                this->delete_lines();
+                delete_lines();
                 return;
             }
 
@@ -156,7 +158,7 @@ void PublicTransport::load_lines(const char *filename)
             unsigned row_len_conn = cells.size();
             if (row_len_conn != row_len) {
                 std::cerr << "Error: invalid line csv file format - every connection has to visit all stops\n";
-                this->delete_lines();
+                delete_lines();
                 return;
             }
 
@@ -170,7 +172,7 @@ void PublicTransport::load_lines(const char *filename)
                 if (!q_time.isValid()) {
                     //TODO delete connections
                     std::cerr << "Error: invalid line csv file format - invalid time format: "<<cell.toStdString()<<"\n";
-                    this->delete_lines();
+                    delete_lines();
                     return;
                 }
 
@@ -182,7 +184,7 @@ void PublicTransport::load_lines(const char *filename)
             Connection *conn = new Connection(line_ptr, stops, times);
             line_ptr->connections.push_back(conn);
         }
-        this->lines.push_back(line_ptr);
+        lines.push_back(line_ptr);
     }
 }
 
@@ -193,24 +195,24 @@ void PublicTransport::set_clock_rate(unsigned clock_rate)
 
 void PublicTransport::delete_lines()
 {
-    for (auto line : this->lines) {
+    for (auto line : lines) {
        delete line;
     }
-    this->lines.clear();
+    lines.clear();
 }
 
 void PublicTransport::update_vehicles()
 {
-    for (auto line : this->lines) {
+    for (auto line : lines) {
         for (auto conn :  line->connections) {
-            conn->update_position(this->get_time());
+            conn->update_position(get_time());
         }
     }
 }
 
 void PublicTransport::prepare_connections()
 {
-    for (auto line : this->lines) {
+    for (auto line : lines) {
         //TODO try catch
         /* First compute the routes */
         line->compute_route();
@@ -223,18 +225,18 @@ void PublicTransport::prepare_connections()
 
 void PublicTransport::start_timer()
 {
-    this->m_timer->start();
+    m_timer->start();
 }
 
 void PublicTransport::stop_timer()
 {
-    this->m_timer->stop();
+    m_timer->stop();
 }
 
 int PublicTransport::create_detour(Street *closed, std::vector<Street *> detour)
 {
     /* First try to get a substitute set of waypoints */
-    std::vector<Waypoint> route = this->compute_waypoints_detour(closed, detour);
+    std::vector<Waypoint> route = compute_waypoints_detour(closed, detour);
 
     if (route.empty()) {
         std::cerr << "Detour error: could not create detour\n";

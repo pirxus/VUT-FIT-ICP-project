@@ -46,6 +46,13 @@ public:
     void toggle_street_names(bool checked);
     void toggle_stop_names(bool checked);
 
+    void delete_streets();
+    void delete_stops();
+    void delete_connections();
+    void delete_street_labels();
+    void delete_stop_labels();
+    void delete_labels();
+
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 

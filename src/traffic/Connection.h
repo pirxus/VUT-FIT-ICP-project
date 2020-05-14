@@ -106,7 +106,7 @@ public:
     void delete_from_schedule(Street *street);
 
 
-    void add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences);
+    void add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences, unsigned detour_len);
 };
 
 #endif

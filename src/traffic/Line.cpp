@@ -269,8 +269,6 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
             m_route_current.insert(m_route_current.end(), new_route_reversed.begin(), new_route_reversed.end());
 
         last_original = std::get<1>(ii) + 1;
-
-        //std::cerr<<std::get<0>(ii)<<" "<<std::get<1>(ii)<<std::endl;
     }
 
     /* Tie up the vector */
@@ -300,33 +298,13 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
         }
     }
 
-    for (auto point : m_route) {
-        std::cerr<<point.pos.x()<<" "<<point.pos.y()<<" ";
-        if (point.stop == nullptr) {
-            std::cerr<<"street: "<<point.street->name<<std::endl;
-        } else {
-            std::cerr<<"stop: "<<point.stop->name()<<std::endl;
-        }
-    }
-
-    std::cerr << std::endl;
-
-    for (auto point : m_route_current) {
-        std::cerr<<point.pos.x()<<" "<<point.pos.y()<<" ";
-        if (point.stop == nullptr) {
-            std::cerr<<"street: "<<point.street->name<<std::endl;
-        } else {
-            std::cerr<<"stop: "<<point.stop->name()<<std::endl;
-        }
-    }
-
     m_route = m_route_current;
     /* Set the new route for the connections */
     for (auto *conn : this->connections) {
         /* First delete the schedule entries that contain the affected stops*/
         conn->delete_from_schedule(closed);
         /* Propagate the delay caused by the detour */
-        conn->add_delay_on_stops(affected_stops, occurences);
+        conn->add_delay_on_stops(affected_stops, occurences, detour.size());
         /* Update the waypoints */
         conn->update_route();
     }
