@@ -36,15 +36,20 @@ class Line {
     std::vector<Street *> m_streets_current; /**< A working copy of m_streets */
     std::vector<Waypoint> m_route_current; /**< A working copy of m_route */
 
+
 public:
     std::vector<Connection *> connections; /**< A vector of all the connections */
+
+    /** References the hash table in the Map class */
+    const std::map<std::tuple<int, int, int, int>, Street *> &streets_by_endpoints_ref;
     /**
      * @brief Line object constructor
      * @param line_number The line number/id
      * @param color The line color - this will be displayed on the map
      */
-    Line(unsigned line_number, QColor color, std::vector<Stop *> stops, std::vector<Street *> streets):
-        m_number{line_number}, m_color{color}, m_stops{stops}, m_streets{streets} {}
+    Line(unsigned line_number, QColor color, std::vector<Stop *> stops,
+         std::vector<Street *> streets, const std::map<std::tuple<int, int, int, int>, Street *> &street_map):
+        m_number{line_number}, m_color{color}, m_stops{stops}, m_streets{streets}, streets_by_endpoints_ref{street_map} {}
 
     /**
      * @brief compute_route This method takes the stops and the streets defining the line

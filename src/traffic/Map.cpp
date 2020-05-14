@@ -85,6 +85,9 @@ void Map::load_streets(const char *filename){
         /* Add the new street */
         Street *s = new Street(street_name, coords[0], coords[1], coords[2], coords[3]);
         this->streets.insert(std::pair<std::string, Street *>(street_name, s));
+        this->streets_by_endpoints.insert(
+                    std::pair<std::tuple<int, int, int, int>, Street *>(
+                        std::tuple<int, int, int, int>(s->start.x(), s->start.y(), s->end.x(), s->end.y()), s));
     }
 }
 

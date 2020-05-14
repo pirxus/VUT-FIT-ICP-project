@@ -147,7 +147,7 @@ void PublicTransport::load_lines(const char *filename)
         }
 
         /* Construct the new Line */
-        Line *line_ptr = new Line(line_number, get_next_color(), stops, streets);
+        Line *line_ptr = new Line(line_number, get_next_color(), stops, streets, map.streets_by_endpoints);
 
         /* Load the connections */
         std::vector<Connection *> conns;

@@ -19,6 +19,7 @@
 class Map {
 public:
     std::map<std::string, Street *> streets; /**< A hash table of all the streets on the map */
+    std::map<std::tuple<int, int, int, int>, Street *> streets_by_endpoints; /**< A hash table of all the streets on the map, keys are street endpoints */
     std::map<std::string, Stop *> stops; /**< A vector of all the stops on the map */
 
     /**

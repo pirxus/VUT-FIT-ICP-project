@@ -158,13 +158,16 @@ unsigned Connection::determine_traffic_situation(Waypoint w1, Waypoint w2)
         return w2.stop->street->get_traffic();
 
     } else { /* Both waypoints are street endpoints */
+        auto street = m_line->streets_by_endpoints_ref.find(
+                    std::tuple<int, int, int, int>(w1.pos.x(), w1.pos.y(), w2.pos.x(), w2.pos.y()));
 
-        if ((w1.pos == w1.street->start && w2.pos == w1.street->end)
-                || (w1.pos == w1.street->end && w2.pos == w1.street->start)) {
-            return w1.street->get_traffic();
-
-        } else {
-            return w2.street->get_traffic();
+        if (street == m_line->streets_by_endpoints_ref.end()) {
+            /* try switching the begining and end */
+            street = m_line->streets_by_endpoints_ref.find(
+                    std::tuple<int, int, int, int>(w2.pos.x(), w2.pos.y(), w1.pos.x(), w1.pos.y()));
+            if (street != m_line->streets_by_endpoints_ref.end())
+                return street->second->get_traffic();
         }
     }
+    return 0;
 }

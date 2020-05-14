@@ -241,7 +241,6 @@ void MainWindow::restore_after_cancel()
 {
     detour.clear();
     ui->buttonPause->setEnabled(true);
-    ui->spinTraffic->setEnabled(true);
     ui->timeEdit->setEnabled(true);
 
     currently_cancelled_street = nullptr;
