@@ -30,7 +30,7 @@ void ViewConnection::redraw()
 
 void ViewConnection::focusInEvent(QFocusEvent *event)
 {
-    this->m_size = 14;
+    this->m_size = 20;
     QRectF rect =  this->rect();
 
     /* resize */
@@ -49,7 +49,7 @@ void ViewConnection::focusInEvent(QFocusEvent *event)
 
 void ViewConnection::focusOutEvent(QFocusEvent *event)
 {
-    this->m_size = 8;
+    this->m_size = 18;
     QRectF rect =  this->rect();
 
     /* resize back */

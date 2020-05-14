@@ -98,6 +98,7 @@ void MainWindow::load_map()
                      ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
                      */
     }
+    ui->actionLoad_map->setEnabled(false);
 }
 
 void MainWindow::load_stops()
@@ -117,6 +118,7 @@ void MainWindow::load_stops()
         text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
         */
     }
+    ui->actionLoad_stops->setEnabled(false);
 }
 
 void MainWindow::load_lines()
@@ -136,6 +138,7 @@ void MainWindow::load_lines()
             this->scene->add_connection(conn);
         }
     }
+    ui->actionLoad_lines->setEnabled(false);
 }
 
 void MainWindow::positions_updated()
@@ -258,21 +261,25 @@ void MainWindow::display_itinerary(Connection *conn)
      this->ui->lineNumberValue->setText(QString::number(line_number));
 
      int sch_size = schedule.size() - 1;
-     int line_cord = -60 * sch_size;
+     int line_cord = 60 * sch_size;
      auto line = itineraryScene->addLine(0, 0, 0, line_cord);
      line->setPen(QPen(Qt::gray, 10, Qt::SolidLine, Qt::RoundCap));
      for (int i = 0; i < sch_size + 1; i++) {
          auto text = itineraryScene->addText(QString(schedule.at(i).first->name().c_str()));
-         text->setPos(20, -15 - 60 * i);
+         text->setPos(20, -15 + 60 * i);
          text->setFont(QFont("Arial" , 10));
+         //auto time = itineraryScene->addText(QTime::(schedule.at(i).second).toString("hh:mm"));
+         //time->setPos(-60, -15 + 60 * i);
+         //time->setFont(QFont("Arial" , 10));
+
 
          if (i > index){
-            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            auto stop = itineraryScene->addEllipse(-10, -10 + 60 * i, 20, 20);
             stop->setBrush(QBrush(QColor{Qt::white}, Qt::SolidPattern));
             stop->setPen(QPen({Qt::black}, 2));
          }
          else {
-            auto stop = itineraryScene->addEllipse(-10, -10 - 60 * i, 20, 20);
+            auto stop = itineraryScene->addEllipse(-10, -10 + 60 * i, 20, 20);
             stop->setBrush(QBrush(QColor{Qt::green}, Qt::SolidPattern));
             stop->setPen(QPen({Qt::black}, 2));
          }
