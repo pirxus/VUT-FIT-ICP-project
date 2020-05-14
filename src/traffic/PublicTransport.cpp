@@ -335,12 +335,3 @@ std::vector<Waypoint> PublicTransport::compute_waypoints_detour(Street *closed, 
     route.push_back(Waypoint(x2, closed));
     return route;
 }
-
-/* End of PublicTransport member methods */
-
-QColor get_next_color()
-{
-    /**< This is an index to the color pallete for our lines. */
-    static unsigned color_index = 0;
-    return line_colors[color_index++ % 10];
-}

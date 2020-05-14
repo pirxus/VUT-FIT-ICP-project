@@ -93,7 +93,7 @@ public:
     /**
      * @brief get_delay Returns current delay of this connection.
      */
-    int get_delay(unsigned sch_index);
+    int get_delay(int sch_index);
     QPointF get_pos() { return this->m_position; }
     Line *get_line() { return this->m_line; }
 

@@ -28,8 +28,8 @@ private:
 
     std::vector<QGraphicsLineItem *> m_displayed_route;
 
-    ViewStreet *canceled_street;
-    std::vector<ViewStreet *> detour;
+    ViewStreet *m_canceled_street;
+    std::vector<ViewStreet *> m_detour;
 
 public:
     explicit Scene(QObject *parent = nullptr);
@@ -41,7 +41,7 @@ public:
     void redraw_connections();
     void prepare_for_detour();
     void end_detour_selection(bool correct);
-    std::vector<ViewStreet *> get_detour() { return detour; }
+    std::vector<ViewStreet *> get_detour() { return m_detour; }
 
     void toggle_street_names(bool checked);
     void toggle_stop_names(bool checked);

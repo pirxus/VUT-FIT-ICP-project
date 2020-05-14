@@ -22,3 +22,10 @@ std::vector<QGraphicsLineItem *> get_lines_waypoints(std::vector<Waypoint> point
     }
     return lines;
 }
+
+QColor get_next_color()
+{
+    /* This is an index to the color pallete for our lines. */
+    static unsigned color_index = 0;
+    return line_colors[color_index++ % 10];
+}

@@ -53,8 +53,6 @@ private slots:
 
     void display_street_name();
     void display_stop_name();
-    //void display_street_name(Street *streets);
-    //void display_stop_name(Stop *stops);
 
 private:
     void initTraffic(); /**< Creates a public transport object */
@@ -69,5 +67,6 @@ private:
 
     bool street_closing_mode;
     std::vector<ViewStreet *> detour;
+    Connection *m_itinerary;
 };
 #endif // MAINWINDOW_H

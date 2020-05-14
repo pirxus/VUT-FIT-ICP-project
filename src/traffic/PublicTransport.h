@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QTime>
 #include "Map.h"
+#include "utilities.h"
 #include "Line.h"
 #include "Stop.h"
 
@@ -19,14 +20,6 @@
 #define DEFAULT_TIME 12*3600
 #define DEFAULT_TIMEOUT 1000
 #define DEFAULT_CLOCK_RATE 10.0f
-
-static QColor line_colors[10] = {QColor("lightGreen"), QColor("magenta"), QColor("yellow"),
-                      QColor("blue"), QColor("darkCyan"), QColor("darkMagenta"),
-                      QColor("cyan"), QColor("darkGreen"), QColor("red"),
-                      QColor("darkRed")};
-
-/* This function returns a color from our color pallete */
-QColor get_next_color();
 
 
 class PublicTransport : public QObject {

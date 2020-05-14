@@ -31,10 +31,10 @@ void Connection::set_schedule(std::vector<Stop *> stops, std::vector<unsigned> t
     }
 }
 
-int Connection::get_delay(unsigned sch_index)
+int Connection::get_delay(int sch_index)
 {
     unsigned stop_delay = 0;
-    if (sch_index < m_schedule.size() - 1) {
+    if (sch_index >= 0 && sch_index < m_schedule.size() - 1) {
         stop_delay = std::get<2>(m_schedule.at(sch_index + 1));
     }
     return m_delay + stop_delay;
