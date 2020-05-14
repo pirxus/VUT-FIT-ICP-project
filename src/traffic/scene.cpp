@@ -10,9 +10,11 @@ Scene::Scene(QObject *parent) : QGraphicsScene(parent)
 Scene::~Scene()
 {
     this->clear_route();
-    for (auto i : this->m_streets) { delete i; }
-    for (auto i : this->m_connections) { delete i; }
-    for (auto i : this->m_stops) { delete i; }
+    for (auto *i : this->m_streets) { delete i; }
+    for (auto *i : this->m_connections) { delete i; }
+    for (auto *i : this->m_stops) { delete i; }
+    for (auto *i : this->m_street_labels) { delete i; }
+    for (auto *i : this->m_stop_labels) { delete i; }
 }
 
 void Scene::add_connection(Connection *conn)
@@ -42,14 +44,31 @@ void Scene::add_street(Street *street)
     connect(new_street, &ViewStreet::street_unselected, this, &Scene::street_unselected_slot);
     connect(new_street, &ViewStreet::notify_street_cancelled, this, &Scene::street_canceled_slot);
     this->addItem(new_street);
+
+    /* Add a street label to the m_stop_labels vector */
+    QGraphicsTextItem *label = new QGraphicsTextItem();
+    label->setHtml("<div style='color: red; background-color:#DDDDDD;'>" + QString(street->name.c_str()) + "</div>");
+    label->setVisible(false);
+    this->addItem(label);
+    label->setPos((street->start.x() + street->end.x()) / 2.0,
+            (street->start.y() + street->end.y()) / 2.0);
+    m_street_labels.push_back(label);
 }
 
 void Scene::add_stop(Stop *stop)
 {
     /* Create and setup new Stop view*/
     ViewStop *new_stop = new ViewStop(stop);
-    this->m_stops.push_back(new_stop);
+    m_stops.push_back(new_stop);
     this->addItem(new_stop);
+
+    /* Add a stop label to the m_stop_labels vector */
+    QGraphicsTextItem *label = new QGraphicsTextItem();
+    label->setHtml("<div style='background-color:#DDDDDD;'>" + QString(stop->name().c_str()) + "</div>");
+    label->setVisible(false);
+    this->addItem(label);
+    label->setPos(stop->pos.x() + 2.0, stop->pos.y() + 2.0);
+    m_stop_labels.push_back(label);
 }
 
 void Scene::redraw_connections()
@@ -166,6 +185,34 @@ void Scene::end_detour_selection(bool correct)
 
     canceled_street = nullptr;
     detour.clear();
+}
+
+void Scene::toggle_street_names(bool checked)
+{
+    /* Show or hide all the labels */
+    for (auto *item : m_street_labels) {
+        if (checked) {
+            item->setVisible(true);
+            item->setZValue(m_stop_labels.at(0)->zValue() + 1);
+        } else {
+            item->setVisible(false);
+            item->setZValue(0);
+        }
+    }
+}
+
+void Scene::toggle_stop_names(bool checked)
+{
+    /* Show or hide all the labels */
+    for (auto *item : m_stop_labels) {
+        if (checked) {
+            item->setVisible(true);
+            item->setZValue(m_street_labels.at(0)->zValue() + 1);
+        } else {
+            item->setVisible(false);
+            item->setZValue(0);
+        }
+    }
 }
 
 void Scene::itinerary_displayed_slot(Connection *conn)

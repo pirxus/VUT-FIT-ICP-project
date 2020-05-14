@@ -92,12 +92,6 @@ void MainWindow::load_map()
     for (auto it = transit->map.streets.begin(); // Streets
         it != transit->map.streets.end(); it++) {
         this->scene->add_street((*it).second);
-        /*
-        // LABELS
-        auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
-        text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
-                     ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
-                     */
     }
     ui->actionLoad_map->setEnabled(false);
 }
@@ -114,10 +108,6 @@ void MainWindow::load_stops()
     for (auto it = transit->map.stops.begin(); // Stops
          it != transit->map.stops.end(); it++) {
         this->scene->add_stop((*it).second);
-        /*
-        auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
-        text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
-        */
     }
     ui->actionLoad_stops->setEnabled(false);
 }
@@ -308,47 +298,20 @@ void MainWindow::clear_itinerary()
 
 void MainWindow::display_street_name()
 {
-        if (this->ui->showStreetNames->isChecked()){
-        // And add them to the scene...
-            for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
-                // LABELS
-                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
-                text->setFont(QFont("Arial" , 9));
-                text->setDefaultTextColor(Qt::red);
-                text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
-                            ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
-             }
-        }
-        else {
-            // remove them from the scene//TODO
-            for (auto it = transit->map.streets.begin(); it != transit->map.streets.end(); it++) {
-                // LABELS
-                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name.c_str()));
-                text->setDefaultTextColor(Qt::white);
-                text->setPos(((*it).second->start.x() + (*it).second->end.x()) / 2.0,
-                             ((*it).second->start.y() + (*it).second->end.y()) / 2.0);
-            }
-         }
+    if (ui->showStreetNames->isChecked()){
+        scene->toggle_street_names(true);
+    } else {
+        scene->toggle_street_names(false);
+    }
 }
 
 void MainWindow::display_stop_name()
 {
-        if (this->ui->showStopNames->isChecked()){
-            for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
-                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
-                text->setDefaultTextColor(Qt::blue);
-                text->setFont(QFont("Arial" , 9));
-                text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
-            }
-        }
-        else {
-            // remove them from the scene//TODO
-            for (auto it = transit->map.stops.begin(); it != transit->map.stops.end(); it++) {
-                auto text = this->ui->graphicsView->scene()->addText(QString((*it).second->name().c_str()));
-                text->setDefaultTextColor(Qt::white);
-                text->setPos((*it).second->pos.x() + 2, (*it).second->pos.y() + 2.0);
-            }
-        }
+    if (ui->showStopNames->isChecked()){
+        scene->toggle_stop_names(true);
+    } else {
+        scene->toggle_stop_names(false);
+    }
 }
 
 void MainWindow::initTraffic()

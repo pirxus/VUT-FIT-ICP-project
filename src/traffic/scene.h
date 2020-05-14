@@ -23,6 +23,9 @@ private:
     std::vector<ViewStreet *> m_streets;
     std::vector<ViewStop *> m_stops;
 
+    std::vector<QGraphicsTextItem *> m_street_labels;
+    std::vector<QGraphicsTextItem *> m_stop_labels;
+
     std::vector<QGraphicsLineItem *> m_displayed_route;
 
     ViewStreet *canceled_street;
@@ -39,6 +42,9 @@ public:
     void prepare_for_detour();
     void end_detour_selection(bool correct);
     std::vector<ViewStreet *> get_detour() { return detour; }
+
+    void toggle_street_names(bool checked);
+    void toggle_stop_names(bool checked);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
