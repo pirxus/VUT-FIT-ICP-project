@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -32,24 +32,24 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <property name="spacing">
-         <number>7</number>
+         <number>5</number>
         </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
         <property name="topMargin">
-         <number>210</number>
+         <number>200</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>210</number>
+         <number>200</number>
         </property>
         <item alignment="Qt::AlignRight">
          <widget class="QPushButton" name="zoomInButton">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -63,7 +63,7 @@
           <property name="maximumSize">
            <size>
             <width>30</width>
-            <height>50</height>
+            <height>30</height>
            </size>
           </property>
           <property name="text">
@@ -80,7 +80,7 @@
         <item alignment="Qt::AlignRight">
          <widget class="QSlider" name="zoomSlider">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -138,7 +138,7 @@
         <item>
          <widget class="QPushButton" name="zoomOutButton">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -152,7 +152,7 @@
           <property name="maximumSize">
            <size>
             <width>30</width>
-            <height>50</height>
+            <height>30</height>
            </size>
           </property>
           <property name="text">
@@ -283,6 +283,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QSlider" name="sliderSpeed">
+           <property name="mouseTracking">
+            <bool>true</bool>
+           </property>
            <property name="toolTip">
             <string>Clock speed</string>
            </property>
@@ -362,7 +365,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
             <widget class="QLabel" name="lineNumber">
              <property name="text">
