@@ -1,7 +1,11 @@
 ﻿/**
  * @file Waypoint.h
- * @brief
- * @author
+ * @brief This module represents a single waypoint on the route of a connection.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ *
+ * This module represents a single waypoint on the route of a connection. These
+ * waypoints are chained into a vector and define the current route for a connection or
+ * line. The Waypoint can either refer to a stop or an endpoint of a street.
  */
 
 #ifndef WAYPOINT_H
@@ -15,12 +19,16 @@
 class Street;
 class Stop;
 
+/**
+ * @brief The Waypoint class represents one waypoint (a stop or a street endpoint) from which
+ * the Line class then constructs routes for the connections.
+ */
 class Waypoint
 {
 public:
-    QPointF pos;
-    Street *street;
-    Stop *stop;
+    QPointF pos; /**< Waypoint position */
+    Street *street; /**< Is this a street endpoint? */
+    Stop *stop; /**< Is the waypoint a stop? */
 
     Waypoint();
     Waypoint(QPointF pos, Street *street): pos{pos}, street{street}, stop{nullptr} {}

@@ -1,4 +1,10 @@
-﻿#include "scene.h"
+﻿/**
+ * @file scene.cpp
+ * @brief An extension of QGraphicsScene with some additional attributes and methods.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ */
+
+#include "scene.h"
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 

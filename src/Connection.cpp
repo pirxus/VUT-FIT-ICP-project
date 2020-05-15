@@ -1,7 +1,7 @@
 ﻿/**
  * @file Connection.cpp
- * @brief
- * @author
+ * @brief This module represents one connection in the system.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
  */
 
 #include "Connection.h"
@@ -14,7 +14,6 @@ Connection::Connection(Line *line, std::vector<Stop *> stops, std::vector<unsign
     /* Set the connection schedule */
     this->set_schedule(stops, times);
     active = 0;
-    m_route_index = 0;
     m_delay = 0;
 }
 
@@ -78,7 +77,6 @@ void Connection::update_position(unsigned time) {
     if (time < start || time - m_delay >= end) {
         this->active = false;
         this->m_delay = 0;
-        this->m_route_index = 0;
 
     } else { /* Now compute the actual position */
 

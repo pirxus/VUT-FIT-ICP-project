@@ -1,4 +1,10 @@
-﻿#include "viewstreet.h"
+﻿/**
+ * @file viewstreet.cpp
+ * @brief A graphical representation of the Stop class.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ */
+
+#include "viewstreet.h"
 
 ViewStreet::ViewStreet(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent) :
     QObject(), QGraphicsLineItem(x1, y1, x2, y2, parent)

@@ -1,7 +1,7 @@
 ﻿/**
  * @file Line.cpp
- * @brief
- * @author
+ * @brief This module represents a line of connections.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
  */
 
 #include "Line.h"
@@ -69,7 +69,6 @@ void Line::compute_route()
 
             } else if (i != stop_len) {
                 /* There was a trailing street in the line specification... */
-                //TODO ERROR CODE
                 std::cerr<<"Error: The specified line did not end correctly\n";
                 return;
             }

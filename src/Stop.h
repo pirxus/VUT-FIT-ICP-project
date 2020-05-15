@@ -1,7 +1,10 @@
 ﻿/**
  * @file Stop.h
- * @brief
- * @author
+ * @brief This module represents a stop.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ *
+ * This module represents a stop. Each stop is defined by its name, the street that it
+ * lies on and its position.
  */
 
 #ifndef STOP_H
@@ -14,11 +17,14 @@
 /* Forward declarations */
 class Street;
 
+/**
+ * @brief The Stop class represents one stop.
+ */
 class Stop {
-    std::string m_name;
+    std::string m_name; /**< The name of the street */
 public:
-    QPointF pos;
-    Street *street;
+    QPointF pos; /**< The position of the stop */
+    Street *street; /**< A pointer to the street the stop lies on */
 
 	/**
     * @brief Stop constructor
@@ -29,7 +35,7 @@ public:
     Stop(Street *street, std::string name, float pos);
 
     /**
-    * @brief name returns name of the stop
+    * @brief Stop name getter
     */
     std::string name() {return m_name;}
 };

@@ -1,7 +1,7 @@
 ﻿/**
  * @file Map.cpp
- * @brief
- * @author
+ * @brief This module represents the the map.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
  */
 
 #include "Map.h"
