@@ -93,10 +93,10 @@ void MainWindow::load_map()
     m_scene->delete_stops();
     m_scene->delete_connections();
 
-    //QString file = QFileDialog::getOpenFileName(this, "Load a street csv file");
-    //if (file == nullptr) return;
-    //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../examples/streetList.csv").absoluteFilePath().toStdString();
+    QString file = QFileDialog::getOpenFileName(this, "Load a street csv file");
+    if (file == nullptr) return;
+    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    //std::string path = QFileInfo("../examples/streetList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the map */
     m_transit->load_map(path.c_str());
@@ -115,10 +115,10 @@ void MainWindow::load_stops()
     m_scene->delete_stop_labels();
     m_scene->delete_connections();
 
-    //QString file = QFileDialog::getOpenFileName(this, "Load a stop csv file");
-    //if (file == nullptr) return;
-    //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../examples/stopList.csv").absoluteFilePath().toStdString();
+    QString file = QFileDialog::getOpenFileName(this, "Load a stop csv file");
+    if (file == nullptr) return;
+    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    //std::string path = QFileInfo("../examples/stopList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the stops */
     m_transit->load_stops(path.c_str());
@@ -131,10 +131,10 @@ void MainWindow::load_stops()
 void MainWindow::load_lines()
 {
     m_scene->delete_connections();
-    //QString file = QFileDialog::getOpenFileName(this, "Load a line/connection csv file");
-    //if (file == nullptr) return;
-    //std::string path = QFileInfo(file).absoluteFilePath().toStdString();
-    std::string path = QFileInfo("../../examples/lineList.csv").absoluteFilePath().toStdString();
+    QString file = QFileDialog::getOpenFileName(this, "Load a line/connection csv file");
+    if (file == nullptr) return;
+    std::string path = QFileInfo(file).absoluteFilePath().toStdString();
+    //std::string path = QFileInfo("../examples/lineList.csv").absoluteFilePath().toStdString();
 
     /* Let the PublicTransport module load the lines */
     m_transit->load_lines(path.c_str());

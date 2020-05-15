@@ -143,6 +143,7 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
                 if (m_route.at(j).pos == w1) {
                     /* Delete the loop */
                     m_route.erase(m_route.begin() + i, m_route.begin() + j);
+                    len -= j - i;
                     i--;
                     break;
 
@@ -259,6 +260,7 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
     std::reverse(new_route_reversed.begin(), new_route_reversed.end());
     int last_original = 0;
     /* Now replace the waypoints in between the indexes */
+    //std::cerr<<this->get_line_number()<<std::endl;
     for (auto ii : index_tuples) {
         m_route_current.insert(m_route_current.end(), m_route.begin() + last_original, m_route.begin() + std::get<0>(ii));
 
@@ -267,7 +269,7 @@ void Line::implement_detour(Street *closed, std::vector<Street *> detour, std::v
         else
             m_route_current.insert(m_route_current.end(), new_route_reversed.begin(), new_route_reversed.end());
 
-        last_original = std::get<1>(ii) + 1;
+        last_original = std::get<1>(ii);
     }
 
     /* Tie up the vector */
