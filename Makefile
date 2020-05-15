@@ -12,7 +12,7 @@ doxygen:
 run: make
 	./src/icp
 qmake:
-	cd src/ && /home/pirx/Qt5.9.9/5.9.9/gcc_64/bin/qmake;
+	cd src/ && qmake;
 
 make: qmake
 	cd src/ && make
