@@ -23,3 +23,13 @@ V souboru stopList.csv se na kazdem radku nachazi jmeno zastavky, jmeno ulice, n
 
 Soubor lineList.csv obsahuje informace o linkach a spojenich. 
 Cislo linky, seznam ulic, po kterych dana linka jede, seznam zastavek, na kterych zastavuje a casy prijezdu jednotlivych spoju na zastavku.
+
+# Ovladatelne prvky gui
+
+Na leve strane aplikace se nachazi posuvnik a tlacitka na priblizovani a oddalovani sceny.
+
+V nahore v pravem sloupci se naleza ukazatel casu s moznosti nastavit vlastni cas po kliknuti. Hned pod ukazatelem casu se nachazi tlacitko na spusteni a zastaveni simulace a posuvnik na zrychlovani nebo zpomalovani casu. 
+
+Pri kliknuti na znacku spoje na mape se v pravém sloupci zobrazi itinerar daneho spoje.
+
+Pro uzavreni ulice staci kliknout na ulici, ktera je urcena k uzavrani a pote nastavit objizdku.
