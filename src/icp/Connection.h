@@ -1,7 +1,11 @@
 ﻿/**
  * @file Connection.h
- * @brief
- * @author
+ * @brief This module represents one connection in the system.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ *
+ * This module represents one connection in the system. Each connection stores a pointer
+ * to its parent line and has its own schedule, which allows us to compute the position
+ * of the particular connection given a time value.
  */
 
 #ifndef CONNECTION_H
@@ -26,6 +30,10 @@ class Stop;
 class Crossroads;
 class Line;
 
+/**
+ * @brief The Connection class, represents one connection in the public
+ * transport system
+ */
 class Connection {
     Line *m_line; /**< The parent line of the connection */
 
@@ -33,11 +41,9 @@ class Connection {
      * @brief Stop - time - delay tuples defining the base schedule for this connection */
     std::vector<std::tuple<Stop *, unsigned, unsigned>> m_schedule;
 
-    /** @brief A list of waypoints for the connection - the first element is the next coordinate
-     * on the route and the second and the third point to a stop/street or a nullptr */
+    /** @brief A list of waypoints for the connection */
     std::vector<Waypoint> m_route;
 
-    unsigned m_route_index; /**< The upcoming stop/crossroads in the m_route list */
     double m_delay; /**< The current delay of the connection */
     QPointF m_position; /**< The current position of the vehicle on the map */
 
@@ -59,23 +65,24 @@ public:
     void update_position(unsigned time);
 
     /**
-     * @brief find_route_segment Returns an index to the schedule
+     * @brief Returns an index to the schedule
      * of the connection which points to the stop the vehicle has passed last
      * @param time The time the index should correspond to
+     * @return Returns an index to the connection schedule
      */
      unsigned find_schedule_index(unsigned time);
 
      /**
-      * @brief determine_traffic_situation This function takes two waypoints in between
+      * @brief This function takes two waypoints in between
       * which the vehicle is present and determines the current street the vehicle is on.
-      * Then the traffic situation on that street is retruned.
-      * @param w1
-      * @param w2
+      * @param w1 The first waypoint
+      * @param w2 The second waypoint
+      * @return Returns the traffic situation coefficient on the street
       */
      unsigned determine_traffic_situation(Waypoint w1, Waypoint w2);
 
     /**
-     * @brief set_schedule Sets the schedule for this connection. This method
+     * @brief Sets the schedule for this connection. This method
      * is only used by the constructor and the schedules should not be altered
      * @param stops The list of stops on the route
      * @param times The timetable corresponding to the stops
@@ -83,29 +90,42 @@ public:
     void set_schedule(std::vector<Stop *> stops, std::vector<unsigned> times);
 
     /**
-     * @brief get_schedule Returns schedule of this connection.
+     * @brief Returns the schedule of this connection.
      */
     std::vector<std::tuple<Stop *, unsigned, unsigned>> get_schedule() { return this->m_schedule; }
 
-    // refernece - open to alterations...
-    std::vector<Waypoint> *get_route() { return &this->m_route; }
-
     /**
-     * @brief get_delay Returns current delay of this connection.
+     * @brief Returns current delay of this connection.
      */
     int get_delay(int sch_index);
-    QPointF get_pos() { return this->m_position; }
-    Line *get_line() { return this->m_line; }
-
 
     /**
-     * @brief delete_from_schedule Deletes all schedule entries for stops that lie on the
+     * @brief Returns the current position of the connection
+     */
+    QPointF get_pos() { return this->m_position; }
+
+    /**
+     * @brief Returns a pointer to the parent line of the connection
+     */
+    Line *get_line() { return this->m_line; }
+
+    /**
+     * @brief Deletes all schedule entries for stops that lie on the
      * specified street
-     * @param street
+     * @param street The street that was closed and its stops need to be eliminated
+     * from the connection schedule
      */
     void delete_from_schedule(Street *street);
 
-
+    /**
+     * @brief When specifying a detour, this function adds delay on all stops after a specified occurence
+     * of a stop in order to compensate for the detour. The amount of delay added corresponds to the length
+     * of the detour segment
+     * @param stops A vector of stops that are located right after a detour segment
+     * @param occurences Specifies how many stops, whose name is specified by the stops vector should be skipped
+     * before adding delay
+     * @param detour_len Specifies the length of the detour segment.
+     */
     void add_delay_on_stops(std::vector<Stop *> stops, std::vector<unsigned> occurences, unsigned detour_len);
 };
 

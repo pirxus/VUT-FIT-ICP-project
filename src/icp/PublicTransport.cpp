@@ -1,7 +1,7 @@
 ﻿/**
  * @file PublicTransport.cpp
- * @brief
- * @author
+ * @brief This is the central module of the program logic.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
  */
 
 #include <QFile>

@@ -1,7 +1,7 @@
 ﻿/**
  * @file Street.cpp
- * @brief
- * @author
+ * @brief This module contains a class that represents a street on the map.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
  */
 
 #include "Street.h"

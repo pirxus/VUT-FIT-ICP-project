@@ -1,5 +1,10 @@
-﻿#include "Waypoint.h"
+﻿/**
+ * @file Waypoint.cpp
+ * @brief This module represents a single waypoint on the route of a connection.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ */
 
+#include "Waypoint.h"
 
 int Waypoint::find_stop(std::vector<Waypoint> points, Stop *stop)
 {

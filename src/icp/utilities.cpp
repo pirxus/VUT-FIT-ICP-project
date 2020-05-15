@@ -1,5 +1,11 @@
-﻿#include "utilities.h"
-#include <regex>
+﻿/**
+ * @file utilities.cpp
+ * @brief A simple utility module implementing marginal functions that didn't fit
+ * anywhere else.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ */
+
+#include "utilities.h"
 
 /**
  * @brief This function strips a string of the initial and trailing whitespace characters

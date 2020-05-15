@@ -1,7 +1,14 @@
 ﻿/**
  * @file Map.h
- * @brief
- * @author
+ * @brief This module represents the the map.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ *
+ * This module represents the the map. The map consists of sets of streets and stops.
+ * All streets are stored in two map containers one of which allows searching by street
+ * name (we are assuming that no two streets are named the same way) and the other one
+ * by the set of street endpoints that define it.
+ *
+ * The stops are also searchable by their respective names.
  */
 
 #ifndef MAP_H
@@ -16,6 +23,9 @@
 #include "Street.h"
 #include "Stop.h"
 
+/**
+ * @brief This class represents the loaded map.
+ */
 class Map {
 public:
     std::map<std::string, Street *> streets; /**< A hash table of all the streets on the map */
@@ -38,8 +48,8 @@ public:
     void delete_stops();
 
     /**
-	* @brief load streets from file
- 	* @param filename
+    * @brief Loads streets from a file
+    * @param filename The source file
  	*/
 	void load_streets(const char *filename);
 
@@ -50,8 +60,8 @@ public:
     void find_crossroads();
 
 	/**
-	* @brief load allstops from file
- 	* @param filename
+    * @brief Loads stops from a file
+    * @param filename The source file
  	*/
     void load_stops(const char *filename);
 };

@@ -1,7 +1,7 @@
 ﻿/**
  * @file Stop.cpp
- * @brief
- * @author
+ * @brief This module represents a stop.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
  */
 
 #include "Stop.h"

@@ -1,4 +1,10 @@
-﻿#include "viewconnection.h"
+﻿/**
+ * @file viewconnection.cpp
+ * @brief A graphical representation of the Connection class.
+ * @authors Šimon Sedláček - xsedla1h, Radim Lipka - xlipka02
+ */
+
+#include "viewconnection.h"
 
 ViewConnection::ViewConnection(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent) :
     QObject(), QGraphicsEllipseItem(x, y, width, height, parent)
