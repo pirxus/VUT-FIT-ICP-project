@@ -26,6 +26,8 @@ Cislo linky, seznam ulic, po kterych dana linka jede, seznam zastavek, na kteryc
 
 # Ovladatelne prvky gui
 
+V levem hornim rohu lze nalezt tlacitka na nacteni dat ze zdrojovych souboru.
+
 Na leve strane aplikace se nachazi posuvnik a tlacitka na priblizovani a oddalovani sceny.
 
 V nahore v pravem sloupci se naleza ukazatel casu s moznosti nastavit vlastni cas po kliknuti. Hned pod ukazatelem casu se nachazi tlacitko na spusteni a zastaveni simulace a posuvnik na zrychlovani nebo zpomalovani casu. 
